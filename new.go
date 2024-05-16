@@ -6,7 +6,6 @@ import (
 	_ "embed"
 	"fmt"
 	"runtime/debug"
-	"sync"
 )
 
 //go:embed data/combined/schema.sql
@@ -17,9 +16,6 @@ var SQLQueries string
 
 // gitRevision is the git revision of the application
 var gitRevision string
-
-// buildInfo is the build information of the application
-var buildInfo debug.BuildInfo
 
 // gitRevision is the git revision of the application
 var buildSum string
@@ -36,10 +32,10 @@ var goVersionId int64
 // gitRevisionId is the id of the git revision
 var gitRevisionId int64
 
-// once is used to ensure that the package is only initialized once
-var once sync.Once
-
+// deployment is the name of the deployment
 var deployment string
+
+// deploymentId is the id of the deployment
 var deploymentId int64
 
 // NewLogsDatabase creates a new logs database queries for an
@@ -55,7 +51,7 @@ var deploymentId int64
 //	}
 //	defer db.Close()
 //	q := NewLogsDatabase(db)
-func NewLogsDatabase(getenv func(string) string, db *sql.DB) (*Queries, error) {
+func NewLogsDatabase(getenv func(string) (string, error), db *sql.DB) (*Queries, error) {
 	ctx := context.Background()
 	buildInfo, ok := debug.ReadBuildInfo()
 	if ok {
@@ -82,7 +78,7 @@ func NewLogsDatabase(getenv func(string) string, db *sql.DB) (*Queries, error) {
 		if err == sql.ErrNoRows {
 			return q, nil
 		}
-		return nil, err
+		return nil, fmt.Errorf("failed to insert build sum: %w", err)
 	}
 	buildSumId = bs.ID
 	gv, err := q.InsertGoVersion(ctx, InsertGoVersionParams{
@@ -93,7 +89,7 @@ func NewLogsDatabase(getenv func(string) string, db *sql.DB) (*Queries, error) {
 		if err == sql.ErrNoRows {
 			return q, nil
 		}
-		return nil, err
+		return nil, fmt.Errorf("failed to insert go version: %w", err)
 	}
 	goVersionId = gv.ID
 	gr, err := q.InsertGitRevision(ctx, InsertGitRevisionParams{
@@ -103,11 +99,12 @@ func NewLogsDatabase(getenv func(string) string, db *sql.DB) (*Queries, error) {
 		if err == sql.ErrNoRows {
 			return q, nil
 		}
-		return nil, err
+		return nil, fmt.Errorf("failed to insert git revision: %w", err)
 	}
 	gitRevisionId = gr.ID
-	if deployment := getenv("DEPLOYMENT"); deployment == "" {
-		return nil, fmt.Errorf("deployment is not specified")
+	deployment, err = getenv("DEPLOYMENT")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get deployment: %w", err)
 	}
 	dp, err := q.InsertDeployment(ctx, InsertDeploymentParams{
 		Name: deployment,
@@ -116,7 +113,7 @@ func NewLogsDatabase(getenv func(string) string, db *sql.DB) (*Queries, error) {
 		if err == sql.ErrNoRows {
 			return q, nil
 		}
-		return nil, err
+		return nil, fmt.Errorf("failed to insert deployment: %w", err)
 	}
 	deploymentId = dp.ID
 	return q, nil

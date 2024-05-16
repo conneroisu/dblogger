@@ -13,12 +13,12 @@ func TestQueries(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	getenv := func(key string) string {
+	getenv := func(key string) (string, error) {
 		switch key {
 		case "DEPLOYMENT":
-			return "staging"
+			return "staging", nil
 		default:
-			return "error"
+			return "", fmt.Errorf("invalid key: %s", key)
 		}
 	}
 	q, err := NewLogsDatabase(getenv, db)
