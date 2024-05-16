@@ -102,13 +102,26 @@ func NewLogsDatabase(db *sql.DB) (*Queries, error) {
 // Write writes the data to the database.
 // This makes the Queries type implement the io.Writer interface.
 func (q Queries) Write(p []byte) (n int, err error) {
-	var apiLog ApiLog
-	err = json.Unmarshal(p, &apiLog)
+	type JsonLog struct {
+		Level       string  `json:"level"`
+		GitRevision string  `json:"git_revision"`
+		Deployment  string  `json:"deployment"`
+		GoVersion   string  `json:"go_version"`
+		BuildSum    string  `json:"build_sum"`
+		Method      string  `json:"method"`
+		Url         string  `json:"url"`
+		UserAgent   string  `json:"user_agent"`
+		ElapsedMs   float64 `json:"elapsed_ms"`
+		Time        string  `json:"time"`
+		Message     string  `json:"message"`
+	}
+	var log JsonLog
+	err = json.Unmarshal(p, &log)
 	if err != nil {
 		return 0, err
 	}
 	err = q.InsertLogEntry(context.Background(), InsertLogEntryParams{
-		GoVersionID:   apiLog.GoVersionID,
+		GoVersionID:   ,
 		BuildSumID:    apiLog.BuildSumID,
 		GitRevisionID: apiLog.GitRevisionID,
 		UserAgent:     apiLog.UserAgent,

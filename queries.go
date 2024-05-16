@@ -85,6 +85,26 @@ func (q *Queries) CountGoVersions(ctx context.Context) (int64, error) {
 	return count, err
 }
 
+const countLogLevels = `-- name: CountLogLevels :one
+SELECT
+    COUNT(*)
+FROM
+    log_levels
+`
+
+// CountLogLevels
+//
+//	SELECT
+//	    COUNT(*)
+//	FROM
+//	    log_levels
+func (q *Queries) CountLogLevels(ctx context.Context) (int64, error) {
+	row := q.db.QueryRowContext(ctx, countLogLevels)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const countLogs = `-- name: CountLogs :one
 SELECT
     COUNT(*)
@@ -228,6 +248,28 @@ type DeleteLogByIDParams struct {
 //	    id = ?
 func (q *Queries) DeleteLogByID(ctx context.Context, arg DeleteLogByIDParams) error {
 	_, err := q.db.ExecContext(ctx, deleteLogByID, arg.ID)
+	return err
+}
+
+const deleteLogLevelByID = `-- name: DeleteLogLevelByID :exec
+DELETE FROM
+    log_levels
+WHERE
+    id = ?
+`
+
+type DeleteLogLevelByIDParams struct {
+	ID int64 `db:"id" json:"id"`
+}
+
+// DeleteLogLevelByID
+//
+//	DELETE FROM
+//	    log_levels
+//	WHERE
+//	    id = ?
+func (q *Queries) DeleteLogLevelByID(ctx context.Context, arg DeleteLogLevelByIDParams) error {
+	_, err := q.db.ExecContext(ctx, deleteLogLevelByID, arg.ID)
 	return err
 }
 
@@ -839,6 +881,50 @@ func (q *Queries) GetLogByID(ctx context.Context, arg GetLogByIDParams) (ApiLog,
 		&i.DeploymentID,
 	)
 	return i, err
+}
+
+const getLogLevelsBySubstring = `-- name: GetLogLevelsBySubstring :many
+SELECT
+    id, name
+FROM
+    log_levels
+WHERE
+    name LIKE ?
+`
+
+type GetLogLevelsBySubstringParams struct {
+	Name string `db:"name" json:"name"`
+}
+
+// GetLogLevelsBySubstring
+//
+//	SELECT
+//	    id, name
+//	FROM
+//	    log_levels
+//	WHERE
+//	    name LIKE ?
+func (q *Queries) GetLogLevelsBySubstring(ctx context.Context, arg GetLogLevelsBySubstringParams) ([]LogLevel, error) {
+	rows, err := q.db.QueryContext(ctx, getLogLevelsBySubstring, arg.Name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LogLevel
+	for rows.Next() {
+		var i LogLevel
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getLogsByBuildSumID = `-- name: GetLogsByBuildSumID :many
@@ -1660,67 +1746,25 @@ func (q *Queries) InsertLogEntry(ctx context.Context, arg InsertLogEntryParams) 
 	return err
 }
 
-const insertLogWithParams = `-- name: InsertLogWithParams :exec
+const insertLogLevel = `-- name: InsertLogLevel :exec
 INSERT INTO
-    api_logs (
-        level_id,
-        go_version_id,
-        build_sum_id,
-        git_revision_id,
-        user_agent,
-        method,
-        url,
-        elapsed_ms,
-        status_code,
-        deployment_id
-    )
+    log_levels (name)
 VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (?)
 `
 
-type InsertLogWithParamsParams struct {
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	GoVersionID   int64  `db:"go_version_id" json:"go_version_id"`
-	BuildSumID    int64  `db:"build_sum_id" json:"build_sum_id"`
-	GitRevisionID int64  `db:"git_revision_id" json:"git_revision_id"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedMs     int64  `db:"elapsed_ms" json:"elapsed_ms"`
-	StatusCode    int64  `db:"status_code" json:"status_code"`
-	DeploymentID  int64  `db:"deployment_id" json:"deployment_id"`
+type InsertLogLevelParams struct {
+	Name string `db:"name" json:"name"`
 }
 
-// InsertLogWithParams
+// InsertLogLevel
 //
 //	INSERT INTO
-//	    api_logs (
-//	        level_id,
-//	        go_version_id,
-//	        build_sum_id,
-//	        git_revision_id,
-//	        user_agent,
-//	        method,
-//	        url,
-//	        elapsed_ms,
-//	        status_code,
-//	        deployment_id
-//	    )
+//	    log_levels (name)
 //	VALUES
-//	    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-func (q *Queries) InsertLogWithParams(ctx context.Context, arg InsertLogWithParamsParams) error {
-	_, err := q.db.ExecContext(ctx, insertLogWithParams,
-		arg.LevelID,
-		arg.GoVersionID,
-		arg.BuildSumID,
-		arg.GitRevisionID,
-		arg.UserAgent,
-		arg.Method,
-		arg.Url,
-		arg.ElapsedMs,
-		arg.StatusCode,
-		arg.DeploymentID,
-	)
+//	    (?)
+func (q *Queries) InsertLogLevel(ctx context.Context, arg InsertLogLevelParams) error {
+	_, err := q.db.ExecContext(ctx, insertLogLevel, arg.Name)
 	return err
 }
 
@@ -2099,6 +2143,87 @@ func (q *Queries) ListGoVersionsPaginated(ctx context.Context, arg ListGoVersion
 			&i.Version,
 			&i.CreatedAt,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listLogLevels = `-- name: ListLogLevels :many
+SELECT
+    id, name
+FROM
+    log_levels
+`
+
+// ListLogLevels
+//
+//	SELECT
+//	    id, name
+//	FROM
+//	    log_levels
+func (q *Queries) ListLogLevels(ctx context.Context) ([]LogLevel, error) {
+	rows, err := q.db.QueryContext(ctx, listLogLevels)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LogLevel
+	for rows.Next() {
+		var i LogLevel
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listLogLevelsPaginated = `-- name: ListLogLevelsPaginated :many
+SELECT
+    id, name
+FROM
+    log_levels
+LIMIT
+    ? OFFSET ?
+`
+
+type ListLogLevelsPaginatedParams struct {
+	Limit  int64 `db:"limit" json:"limit"`
+	Offset int64 `db:"offset" json:"offset"`
+}
+
+// ListLogLevelsPaginated
+//
+//	SELECT
+//	    id, name
+//	FROM
+//	    log_levels
+//	LIMIT
+//	    ? OFFSET ?
+func (q *Queries) ListLogLevelsPaginated(ctx context.Context, arg ListLogLevelsPaginatedParams) ([]LogLevel, error) {
+	rows, err := q.db.QueryContext(ctx, listLogLevelsPaginated, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LogLevel
+	for rows.Next() {
+		var i LogLevel
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -2626,4 +2751,33 @@ func (q *Queries) ListURLsPaginated(ctx context.Context, arg ListURLsPaginatedPa
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateGoVersionByID = `-- name: UpdateGoVersionByID :exec
+UPDATE
+    go_versions
+SET
+    name = ?,
+    version = ?
+WHERE
+    id = 1
+`
+
+type UpdateGoVersionByIDParams struct {
+	Name    string `db:"name" json:"name"`
+	Version string `db:"version" json:"version"`
+}
+
+// UpdateGoVersionByID
+//
+//	UPDATE
+//	    go_versions
+//	SET
+//	    name = ?,
+//	    version = ?
+//	WHERE
+//	    id = 1
+func (q *Queries) UpdateGoVersionByID(ctx context.Context, arg UpdateGoVersionByIDParams) error {
+	_, err := q.db.ExecContext(ctx, updateGoVersionByID, arg.Name, arg.Version)
+	return err
 }
