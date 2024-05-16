@@ -101,7 +101,7 @@ func NewLogsDatabase(db *sql.DB) (*Queries, error) {
 
 // Write writes the data to the database.
 // This makes the Queries type implement the io.Writer interface.
-func (q *Queries) Write(p []byte) (n int, err error) {
+func (q Queries) Write(p []byte) (n int, err error) {
 	var apiLog ApiLog
 	err = json.Unmarshal(p, &apiLog)
 	if err != nil {
@@ -127,7 +127,7 @@ func (q *Queries) Write(p []byte) (n int, err error) {
 
 // WriteLevel writes the data to the database with the provided level.
 // This makes the Queries type implement the zerolog.LevelWriter interface.
-func (q *Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
+func (q Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
 	var apiLog ApiLog
 	err = json.Unmarshal(p, &apiLog)
 	if err != nil {
