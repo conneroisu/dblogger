@@ -71,3 +71,9 @@ FROM
     go_versions
 WHERE
     name = ?;
+
+-- name: InsertGoVersionReturningID :one
+INSERT INTO
+    go_versions (name, version)
+VALUES
+    (?, ?) RETURNING id;

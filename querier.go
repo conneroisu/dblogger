@@ -364,6 +364,13 @@ type Querier interface {
 	//  VALUES
 	//      (?) RETURNING id, build_sum, created_at
 	InsertBuildSum(ctx context.Context, arg InsertBuildSumParams) (BuildSum, error)
+	//InsertBuildSumReturningID
+	//
+	//  INSERT INTO
+	//      build_sums (build_sum)
+	//  VALUES
+	//      (?) RETURNING id
+	InsertBuildSumReturningID(ctx context.Context, arg InsertBuildSumReturningIDParams) (int64, error)
 	//InsertBuildSumWithParam
 	//
 	//  INSERT INTO
@@ -378,6 +385,13 @@ type Querier interface {
 	//  VALUES
 	//      (?) RETURNING id, name, created_at, updated_at
 	InsertDeployment(ctx context.Context, arg InsertDeploymentParams) (Deployment, error)
+	//InsertDeploymentReturningID
+	//
+	//  INSERT INTO
+	//      deployments (name)
+	//  VALUES
+	//      (?) RETURNING id
+	InsertDeploymentReturningID(ctx context.Context, arg InsertDeploymentReturningIDParams) (int64, error)
 	//InsertGitRevision
 	//
 	//  INSERT INTO
@@ -385,6 +399,13 @@ type Querier interface {
 	//  VALUES
 	//      (?) RETURNING id, git_revision, created_at
 	InsertGitRevision(ctx context.Context, arg InsertGitRevisionParams) (GitRevision, error)
+	//InsertGitRevisionReturningID
+	//
+	//  INSERT INTO
+	//      git_revisions (git_revision)
+	//  VALUES
+	//      (?) RETURNING id
+	InsertGitRevisionReturningID(ctx context.Context, arg InsertGitRevisionReturningIDParams) (int64, error)
 	//InsertGitRevisionWithParam
 	//
 	//  INSERT INTO
@@ -399,6 +420,13 @@ type Querier interface {
 	//  VALUES
 	//      (?, ?) RETURNING id, name, version, created_at
 	InsertGoVersion(ctx context.Context, arg InsertGoVersionParams) (GoVersion, error)
+	//InsertGoVersionReturningID
+	//
+	//  INSERT INTO
+	//      go_versions (name, version)
+	//  VALUES
+	//      (?, ?) RETURNING id
+	InsertGoVersionReturningID(ctx context.Context, arg InsertGoVersionReturningIDParams) (int64, error)
 	//InsertLogEntry
 	//
 	//  INSERT INTO

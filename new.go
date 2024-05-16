@@ -71,7 +71,11 @@ func NewLogsDatabase(getenv func(string) (string, error), db *sql.DB) (*Queries,
 			return nil, fmt.Errorf("failed to create database: %w", err)
 		}
 	}
-	bs, err := q.InsertBuildSum(ctx, InsertBuildSumParams{
+	deployment, err = getenv("DEPLOYMENT")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get deployment: %w", err)
+	}
+	buildSumId, err = q.InsertBuildSumReturningID(ctx, InsertBuildSumReturningIDParams{
 		BuildSum: buildSum,
 	})
 	if err != nil {
@@ -80,8 +84,7 @@ func NewLogsDatabase(getenv func(string) (string, error), db *sql.DB) (*Queries,
 		}
 		return nil, fmt.Errorf("failed to insert build sum: %w", err)
 	}
-	buildSumId = bs.ID
-	gv, err := q.InsertGoVersion(ctx, InsertGoVersionParams{
+	goVersionId, err = q.InsertGoVersionReturningID(ctx, InsertGoVersionReturningIDParams{
 		Name:    goVersion,
 		Version: goVersion,
 	})
@@ -91,8 +94,7 @@ func NewLogsDatabase(getenv func(string) (string, error), db *sql.DB) (*Queries,
 		}
 		return nil, fmt.Errorf("failed to insert go version: %w", err)
 	}
-	goVersionId = gv.ID
-	gr, err := q.InsertGitRevision(ctx, InsertGitRevisionParams{
+	gitRevisionId, err = q.InsertGitRevisionReturningID(ctx, InsertGitRevisionReturningIDParams{
 		GitRevision: gitRevision,
 	})
 	if err != nil {
@@ -101,12 +103,7 @@ func NewLogsDatabase(getenv func(string) (string, error), db *sql.DB) (*Queries,
 		}
 		return nil, fmt.Errorf("failed to insert git revision: %w", err)
 	}
-	gitRevisionId = gr.ID
-	deployment, err = getenv("DEPLOYMENT")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get deployment: %w", err)
-	}
-	dp, err := q.InsertDeployment(ctx, InsertDeploymentParams{
+	deploymentId, err = q.InsertDeploymentReturningID(ctx, InsertDeploymentReturningIDParams{
 		Name: deployment,
 	})
 	if err != nil {
@@ -115,6 +112,5 @@ func NewLogsDatabase(getenv func(string) (string, error), db *sql.DB) (*Queries,
 		}
 		return nil, fmt.Errorf("failed to insert deployment: %w", err)
 	}
-	deploymentId = dp.ID
 	return q, nil
 }

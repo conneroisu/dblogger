@@ -522,6 +522,12 @@ FROM
 LIMIT
     ? OFFSET ?;
 
+-- name: InsertBuildSumReturningID :one
+INSERT INTO
+    build_sums (build_sum)
+VALUES
+    (?) RETURNING id;
+
 -- name: CountDeployments :one
 SELECT
     COUNT(*)
@@ -586,6 +592,12 @@ FROM
 LIMIT
     ? OFFSET ?;
 
+-- name: InsertDeploymentReturningID :one
+INSERT INTO
+    deployments (name)
+VALUES
+    (?) RETURNING id;
+
 -- name: CountGitRevisions :one
 SELECT
     COUNT(*)
@@ -647,6 +659,12 @@ FROM
     git_revisions
 LIMIT
     ? OFFSET ?;
+
+-- name: InsertGitRevisionReturningID :one
+INSERT INTO
+    git_revisions (git_revision)
+VALUES
+    (?) RETURNING id;
 
 -- name: CountGoVersions :one
 SELECT
@@ -721,6 +739,12 @@ FROM
     go_versions
 WHERE
     name = ?;
+
+-- name: InsertGoVersionReturningID :one
+INSERT INTO
+    go_versions (name, version)
+VALUES
+    (?, ?) RETURNING id;
 
 -- name: CountLogLevels :one
 SELECT

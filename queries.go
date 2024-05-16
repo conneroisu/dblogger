@@ -1472,6 +1472,30 @@ func (q *Queries) InsertBuildSum(ctx context.Context, arg InsertBuildSumParams) 
 	return i, err
 }
 
+const insertBuildSumReturningID = `-- name: InsertBuildSumReturningID :one
+INSERT INTO
+    build_sums (build_sum)
+VALUES
+    (?) RETURNING id
+`
+
+type InsertBuildSumReturningIDParams struct {
+	BuildSum string `db:"build_sum" json:"build_sum"`
+}
+
+// InsertBuildSumReturningID
+//
+//	INSERT INTO
+//	    build_sums (build_sum)
+//	VALUES
+//	    (?) RETURNING id
+func (q *Queries) InsertBuildSumReturningID(ctx context.Context, arg InsertBuildSumReturningIDParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, insertBuildSumReturningID, arg.BuildSum)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
+}
+
 const insertBuildSumWithParam = `-- name: InsertBuildSumWithParam :exec
 INSERT INTO
     build_sums (build_sum)
@@ -1523,6 +1547,30 @@ func (q *Queries) InsertDeployment(ctx context.Context, arg InsertDeploymentPara
 	return i, err
 }
 
+const insertDeploymentReturningID = `-- name: InsertDeploymentReturningID :one
+INSERT INTO
+    deployments (name)
+VALUES
+    (?) RETURNING id
+`
+
+type InsertDeploymentReturningIDParams struct {
+	Name string `db:"name" json:"name"`
+}
+
+// InsertDeploymentReturningID
+//
+//	INSERT INTO
+//	    deployments (name)
+//	VALUES
+//	    (?) RETURNING id
+func (q *Queries) InsertDeploymentReturningID(ctx context.Context, arg InsertDeploymentReturningIDParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, insertDeploymentReturningID, arg.Name)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
+}
+
 const insertGitRevision = `-- name: InsertGitRevision :one
 INSERT INTO
     git_revisions (git_revision)
@@ -1545,6 +1593,30 @@ func (q *Queries) InsertGitRevision(ctx context.Context, arg InsertGitRevisionPa
 	var i GitRevision
 	err := row.Scan(&i.ID, &i.GitRevision, &i.CreatedAt)
 	return i, err
+}
+
+const insertGitRevisionReturningID = `-- name: InsertGitRevisionReturningID :one
+INSERT INTO
+    git_revisions (git_revision)
+VALUES
+    (?) RETURNING id
+`
+
+type InsertGitRevisionReturningIDParams struct {
+	GitRevision string `db:"git_revision" json:"git_revision"`
+}
+
+// InsertGitRevisionReturningID
+//
+//	INSERT INTO
+//	    git_revisions (git_revision)
+//	VALUES
+//	    (?) RETURNING id
+func (q *Queries) InsertGitRevisionReturningID(ctx context.Context, arg InsertGitRevisionReturningIDParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, insertGitRevisionReturningID, arg.GitRevision)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
 }
 
 const insertGitRevisionWithParam = `-- name: InsertGitRevisionWithParam :exec
@@ -1597,6 +1669,31 @@ func (q *Queries) InsertGoVersion(ctx context.Context, arg InsertGoVersionParams
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const insertGoVersionReturningID = `-- name: InsertGoVersionReturningID :one
+INSERT INTO
+    go_versions (name, version)
+VALUES
+    (?, ?) RETURNING id
+`
+
+type InsertGoVersionReturningIDParams struct {
+	Name    string `db:"name" json:"name"`
+	Version string `db:"version" json:"version"`
+}
+
+// InsertGoVersionReturningID
+//
+//	INSERT INTO
+//	    go_versions (name, version)
+//	VALUES
+//	    (?, ?) RETURNING id
+func (q *Queries) InsertGoVersionReturningID(ctx context.Context, arg InsertGoVersionReturningIDParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, insertGoVersionReturningID, arg.Name, arg.Version)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
 }
 
 const insertLogEntry = `-- name: InsertLogEntry :exec

@@ -59,3 +59,9 @@ FROM
     git_revisions
 LIMIT
     ? OFFSET ?;
+
+-- name: InsertGitRevisionReturningID :one
+INSERT INTO
+    git_revisions (git_revision)
+VALUES
+    (?) RETURNING id;

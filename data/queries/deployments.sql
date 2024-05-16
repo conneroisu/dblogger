@@ -61,3 +61,9 @@ FROM
     deployments
 LIMIT
     ? OFFSET ?;
+
+-- name: InsertDeploymentReturningID :one
+INSERT INTO
+    deployments (name)
+VALUES
+    (?) RETURNING id;

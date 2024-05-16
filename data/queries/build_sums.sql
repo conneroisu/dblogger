@@ -59,3 +59,9 @@ FROM
     build_sums
 LIMIT
     ? OFFSET ?;
+
+-- name: InsertBuildSumReturningID :one
+INSERT INTO
+    build_sums (build_sum)
+VALUES
+    (?) RETURNING id;
