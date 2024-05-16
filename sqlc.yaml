@@ -1,0 +1,21 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    queries: "./data/combined/queries.sql"
+    schema: "./data/combined/schema.sql"
+    gen:
+      go:
+        package: "dblogger"
+        out: "./data"
+        sql_package: database/sql
+        emit_json_tags: true
+        json_tags_id_uppercase: false
+        json_tags_case_style: "snake"
+        emit_db_tags: true
+        emit_pointers_for_null_types: true
+        emit_interface: true
+        emit_sql_as_comment: true
+        output_db_file_name: database.go
+        output_models_file_name: models.go
+        output_batch_file_name: batch.go
+        query_parameter_limit: 0
