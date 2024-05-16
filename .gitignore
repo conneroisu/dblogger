@@ -1,0 +1,12 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+data/models.go
+data/querier.go
+data/queries.sql.go
+data/database.go

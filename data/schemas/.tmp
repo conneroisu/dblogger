@@ -1,0 +1,17 @@
+
+    --  name                TEXT    NOT NULL,
+    --  id_token            TEXT    NOT NULL,
+    --  raw_data            TEXT    NOT NULL,
+    --  email               TEXT,
+    --  last_name           TEXT,
+    --  location            TEXT,
+    --  nick_name           TEXT,
+    --  provider            TEXT,
+    --  avatar_url          TEXT,
+    --  expires_at          TEXT,
+    --  first_name          TEXT,
+    --  access_token        TEXT,
+    --  description         TEXT,
+    --  refresh_token       TEXT,
+    --  access_token_secret TEXT,
+    --  theme               TEXT
