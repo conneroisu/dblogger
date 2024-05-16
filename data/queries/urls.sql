@@ -45,3 +45,25 @@ FROM
     urls
 LIMIT
     ? OFFSET ?;
+
+-- name: InsertURLWithParam :exec
+INSERT INTO
+    urls (url)
+VALUES
+    (?);
+
+-- name: GetURLByID :one
+SELECT
+    *
+FROM
+    urls
+WHERE
+    id = ?;
+
+-- name: GetURLsByDate :many
+SELECT
+    *
+FROM
+    urls
+WHERE
+    created_at >= ?;

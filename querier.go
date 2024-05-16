@@ -52,6 +52,13 @@ type Querier interface {
 	//  FROM
 	//      go_versions
 	CountGoVersions(ctx context.Context) (int64, error)
+	//CountLogLevels
+	//
+	//  SELECT
+	//      COUNT(*)
+	//  FROM
+	//      log_levels
+	CountLogLevels(ctx context.Context) (int64, error)
 	//CountLogs
 	//
 	//  SELECT
@@ -101,6 +108,13 @@ type Querier interface {
 	//  WHERE
 	//      id = ?
 	DeleteLogByID(ctx context.Context, arg DeleteLogByIDParams) error
+	//DeleteLogLevelByID
+	//
+	//  DELETE FROM
+	//      log_levels
+	//  WHERE
+	//      id = ?
+	DeleteLogLevelByID(ctx context.Context, arg DeleteLogLevelByIDParams) error
 	//DeleteURLByID
 	//
 	//  DELETE FROM
@@ -189,15 +203,15 @@ type Querier interface {
 	//  WHERE
 	//      created_at >= ?
 	GetGitRevisionsByDate(ctx context.Context, arg GetGitRevisionsByDateParams) ([]GitRevision, error)
-	//GetGitRevisionsBySubstring
+	//GetGitRevisionsByName
 	//
 	//  SELECT
 	//      id, git_revision, created_at
 	//  FROM
 	//      git_revisions
 	//  WHERE
-	//      git_revision LIKE ?
-	GetGitRevisionsBySubstring(ctx context.Context, arg GetGitRevisionsBySubstringParams) ([]GitRevision, error)
+	//      git_revision = ?
+	GetGitRevisionsByName(ctx context.Context, arg GetGitRevisionsByNameParams) (GitRevision, error)
 	//GetGoVersionByID
 	//
 	//  SELECT
@@ -207,6 +221,15 @@ type Querier interface {
 	//  WHERE
 	//      id = ?
 	GetGoVersionByID(ctx context.Context, arg GetGoVersionByIDParams) (GoVersion, error)
+	//GetGoVersionIdByName
+	//
+	//  SELECT
+	//      id
+	//  FROM
+	//      go_versions
+	//  WHERE
+	//      name = ?
+	GetGoVersionIdByName(ctx context.Context, arg GetGoVersionIdByNameParams) (int64, error)
 	//GetGoVersionsByDate
 	//
 	//  SELECT
@@ -229,16 +252,25 @@ type Querier interface {
 	//GetLogByID
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
 	//      id = ?
 	GetLogByID(ctx context.Context, arg GetLogByIDParams) (ApiLog, error)
+	//GetLogLevelsBySubstring
+	//
+	//  SELECT
+	//      id, name
+	//  FROM
+	//      log_levels
+	//  WHERE
+	//      name LIKE ?
+	GetLogLevelsBySubstring(ctx context.Context, arg GetLogLevelsBySubstringParams) ([]LogLevel, error)
 	//GetLogsByBuildSumID
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
@@ -247,7 +279,7 @@ type Querier interface {
 	//GetLogsByDate
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
@@ -256,35 +288,25 @@ type Querier interface {
 	//GetLogsByDateRange
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
 	//      created_at BETWEEN ? AND ?
 	GetLogsByDateRange(ctx context.Context, arg GetLogsByDateRangeParams) ([]ApiLog, error)
-	//GetLogsByDeploymentIDAndStatus
-	//
-	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
-	//  FROM
-	//      api_logs
-	//  WHERE
-	//      deployment_id = ?
-	//      AND status_code = ?
-	GetLogsByDeploymentIDAndStatus(ctx context.Context, arg GetLogsByDeploymentIDAndStatusParams) ([]ApiLog, error)
 	//GetLogsByElapsedRange
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
-	//      elapsed_ms BETWEEN ? AND ?
+	//      elapsed_ns BETWEEN ? AND ?
 	GetLogsByElapsedRange(ctx context.Context, arg GetLogsByElapsedRangeParams) ([]ApiLog, error)
 	//GetLogsByGitRevisionID
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
@@ -293,7 +315,7 @@ type Querier interface {
 	//GetLogsByGoVersionID
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
@@ -302,7 +324,7 @@ type Querier interface {
 	//GetLogsByURLSubstring
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
@@ -340,8 +362,8 @@ type Querier interface {
 	//  INSERT INTO
 	//      build_sums (build_sum)
 	//  VALUES
-	//      (?)
-	InsertBuildSum(ctx context.Context, arg InsertBuildSumParams) error
+	//      (?) RETURNING id, build_sum, created_at
+	InsertBuildSum(ctx context.Context, arg InsertBuildSumParams) (BuildSum, error)
 	//InsertBuildSumWithParam
 	//
 	//  INSERT INTO
@@ -354,22 +376,15 @@ type Querier interface {
 	//  INSERT INTO
 	//      deployments (name)
 	//  VALUES
-	//      (?)
-	InsertDeployment(ctx context.Context, arg InsertDeploymentParams) error
-	//InsertDeploymentWithParam
-	//
-	//  INSERT INTO
-	//      deployments (name)
-	//  VALUES
-	//      (?)
-	InsertDeploymentWithParam(ctx context.Context, arg InsertDeploymentWithParamParams) error
+	//      (?) RETURNING id, name, created_at, updated_at
+	InsertDeployment(ctx context.Context, arg InsertDeploymentParams) (Deployment, error)
 	//InsertGitRevision
 	//
 	//  INSERT INTO
 	//      git_revisions (git_revision)
 	//  VALUES
-	//      (?)
-	InsertGitRevision(ctx context.Context, arg InsertGitRevisionParams) error
+	//      (?) RETURNING id, git_revision, created_at
+	InsertGitRevision(ctx context.Context, arg InsertGitRevisionParams) (GitRevision, error)
 	//InsertGitRevisionWithParam
 	//
 	//  INSERT INTO
@@ -382,15 +397,8 @@ type Querier interface {
 	//  INSERT INTO
 	//      go_versions (name, version)
 	//  VALUES
-	//      (?, ?)
-	InsertGoVersion(ctx context.Context, arg InsertGoVersionParams) error
-	//InsertGoVersionWithParams
-	//
-	//  INSERT INTO
-	//      go_versions (name, version)
-	//  VALUES
-	//      (?, ?)
-	InsertGoVersionWithParams(ctx context.Context, arg InsertGoVersionWithParamsParams) error
+	//      (?, ?) RETURNING id, name, version, created_at
+	InsertGoVersion(ctx context.Context, arg InsertGoVersionParams) (GoVersion, error)
 	//InsertLogEntry
 	//
 	//  INSERT INTO
@@ -401,32 +409,20 @@ type Querier interface {
 	//          user_agent,
 	//          method,
 	//          url,
-	//          elapsed_ms,
-	//          status_code,
+	//          elapsed_ns,
 	//          deployment_id,
 	//          level_id
 	//      )
 	//  VALUES
-	//      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	//      (?, ?, ?, ?, ?, ?, ?, ?, ?)
 	InsertLogEntry(ctx context.Context, arg InsertLogEntryParams) error
-	//InsertLogWithParams
+	//InsertLogLevel
 	//
 	//  INSERT INTO
-	//      api_logs (
-	//          level_id,
-	//          go_version_id,
-	//          build_sum_id,
-	//          git_revision_id,
-	//          user_agent,
-	//          method,
-	//          url,
-	//          elapsed_ms,
-	//          status_code,
-	//          deployment_id
-	//      )
+	//      log_levels (name)
 	//  VALUES
-	//      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-	InsertLogWithParams(ctx context.Context, arg InsertLogWithParamsParams) error
+	//      (?)
+	InsertLogLevel(ctx context.Context, arg InsertLogLevelParams) error
 	//InsertURL
 	//
 	//  INSERT INTO
@@ -505,17 +501,33 @@ type Querier interface {
 	//  LIMIT
 	//      ? OFFSET ?
 	ListGoVersionsPaginated(ctx context.Context, arg ListGoVersionsPaginatedParams) ([]GoVersion, error)
+	//ListLogLevels
+	//
+	//  SELECT
+	//      id, name
+	//  FROM
+	//      log_levels
+	ListLogLevels(ctx context.Context) ([]LogLevel, error)
+	//ListLogLevelsPaginated
+	//
+	//  SELECT
+	//      id, name
+	//  FROM
+	//      log_levels
+	//  LIMIT
+	//      ? OFFSET ?
+	ListLogLevelsPaginated(ctx context.Context, arg ListLogLevelsPaginatedParams) ([]LogLevel, error)
 	//ListLogs
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	ListLogs(ctx context.Context) ([]ApiLog, error)
 	//ListLogsByDeploymentID
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
@@ -524,25 +536,16 @@ type Querier interface {
 	//ListLogsByMethod
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
 	//      method = ?
 	ListLogsByMethod(ctx context.Context, arg ListLogsByMethodParams) ([]ApiLog, error)
-	//ListLogsByStatusCode
-	//
-	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
-	//  FROM
-	//      api_logs
-	//  WHERE
-	//      status_code = ?
-	ListLogsByStatusCode(ctx context.Context, arg ListLogsByStatusCodeParams) ([]ApiLog, error)
 	//ListLogsByUserAgent
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  WHERE
@@ -551,7 +554,7 @@ type Querier interface {
 	//ListLogsPaginated
 	//
 	//  SELECT
-	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ms, status_code, deployment_id
+	//      id, level_id, created_at, go_version_id, build_sum_id, git_revision_id, user_agent, method, url, elapsed_ns, deployment_id
 	//  FROM
 	//      api_logs
 	//  LIMIT
@@ -565,8 +568,7 @@ type Querier interface {
 	//      l.user_agent,
 	//      l.method,
 	//      l.url,
-	//      l.elapsed_ms,
-	//      l.status_code,
+	//      l.elapsed_ns,
 	//      l.level_id,
 	//      le.name AS level_name,
 	//      gv.name AS go_version_name,
@@ -581,6 +583,337 @@ type Querier interface {
 	//      JOIN build_sums bs ON l.build_sum_id = bs.id
 	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
 	ListLogsWithJoin(ctx context.Context) ([]ListLogsWithJoinRow, error)
+	//ListLogsWithJoinByBuildSumID
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      bs.id = ?
+	ListLogsWithJoinByBuildSumID(ctx context.Context, arg ListLogsWithJoinByBuildSumIDParams) ([]ListLogsWithJoinByBuildSumIDRow, error)
+	//ListLogsWithJoinByBuildSumIDPaginated
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      bs.id = ?
+	ListLogsWithJoinByBuildSumIDPaginated(ctx context.Context, arg ListLogsWithJoinByBuildSumIDPaginatedParams) ([]ListLogsWithJoinByBuildSumIDPaginatedRow, error)
+	//ListLogsWithJoinByDate
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      created_at BETWEEN ? AND ?
+	ListLogsWithJoinByDate(ctx context.Context, arg ListLogsWithJoinByDateParams) ([]ListLogsWithJoinByDateRow, error)
+	//ListLogsWithJoinByDatePaginated
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      created_at BETWEEN ? AND ?
+	//  LIMIT
+	//      ? OFFSET ?
+	ListLogsWithJoinByDatePaginated(ctx context.Context, arg ListLogsWithJoinByDatePaginatedParams) ([]ListLogsWithJoinByDatePaginatedRow, error)
+	//ListLogsWithJoinByDateRange
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      created_at BETWEEN ? AND ?
+	ListLogsWithJoinByDateRange(ctx context.Context, arg ListLogsWithJoinByDateRangeParams) ([]ListLogsWithJoinByDateRangeRow, error)
+	//ListLogsWithJoinByDateRangePaginated
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      created_at BETWEEN ? AND ?
+	//  LIMIT
+	//      ? OFFSET ?
+	ListLogsWithJoinByDateRangePaginated(ctx context.Context, arg ListLogsWithJoinByDateRangePaginatedParams) ([]ListLogsWithJoinByDateRangePaginatedRow, error)
+	//ListLogsWithJoinByElapsedRange
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      elapsed_ns BETWEEN ? AND ?
+	ListLogsWithJoinByElapsedRange(ctx context.Context, arg ListLogsWithJoinByElapsedRangeParams) ([]ListLogsWithJoinByElapsedRangeRow, error)
+	//ListLogsWithJoinByElapsedRangePaginated
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      elapsed_ns BETWEEN ? AND ?
+	//  LIMIT
+	//      ? OFFSET ?
+	ListLogsWithJoinByElapsedRangePaginated(ctx context.Context, arg ListLogsWithJoinByElapsedRangePaginatedParams) ([]ListLogsWithJoinByElapsedRangePaginatedRow, error)
+	//ListLogsWithJoinByGitRevisionID
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      gr.id = ?
+	ListLogsWithJoinByGitRevisionID(ctx context.Context, arg ListLogsWithJoinByGitRevisionIDParams) ([]ListLogsWithJoinByGitRevisionIDRow, error)
+	//ListLogsWithJoinByGitRevisionIDPaginated
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      gr.id = ?
+	ListLogsWithJoinByGitRevisionIDPaginated(ctx context.Context, arg ListLogsWithJoinByGitRevisionIDPaginatedParams) ([]ListLogsWithJoinByGitRevisionIDPaginatedRow, error)
+	//ListLogsWithJoinByGoVersionID
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      gv.id = ?
+	ListLogsWithJoinByGoVersionID(ctx context.Context, arg ListLogsWithJoinByGoVersionIDParams) ([]ListLogsWithJoinByGoVersionIDRow, error)
+	//ListLogsWithJoinByGoVersionIDPaginated
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  WHERE
+	//      gv.id = ?
+	ListLogsWithJoinByGoVersionIDPaginated(ctx context.Context, arg ListLogsWithJoinByGoVersionIDPaginatedParams) ([]ListLogsWithJoinByGoVersionIDPaginatedRow, error)
+	//ListLogsWithJoinPaginated
+	//
+	//  SELECT
+	//      l.id,
+	//      l.created_at,
+	//      l.user_agent,
+	//      l.method,
+	//      l.url,
+	//      l.elapsed_ns,
+	//      l.level_id,
+	//      le.name AS level_name,
+	//      gv.name AS go_version_name,
+	//      gv.version AS go_version,
+	//      bs.build_sum,
+	//      gr.git_revision
+	//  FROM
+	//      api_logs l
+	//      JOIN log_levels le ON l.level_id = le.id
+	//      JOIN deployments d ON l.deployment_id = d.id
+	//      JOIN go_versions gv ON l.go_version_id = gv.id
+	//      JOIN build_sums bs ON l.build_sum_id = bs.id
+	//      JOIN git_revisions gr ON l.git_revision_id = gr.id
+	//  LIMIT
+	//      ? OFFSET ?
+	ListLogsWithJoinPaginated(ctx context.Context, arg ListLogsWithJoinPaginatedParams) ([]ListLogsWithJoinPaginatedRow, error)
 	//ListURLs
 	//
 	//  SELECT
@@ -597,6 +930,16 @@ type Querier interface {
 	//  LIMIT
 	//      ? OFFSET ?
 	ListURLsPaginated(ctx context.Context, arg ListURLsPaginatedParams) ([]Url, error)
+	//UpdateGoVersionByID
+	//
+	//  UPDATE
+	//      go_versions
+	//  SET
+	//      name = ?,
+	//      version = ?
+	//  WHERE
+	//      id = 1
+	UpdateGoVersionByID(ctx context.Context, arg UpdateGoVersionByIDParams) error
 }
 
 var _ Querier = (*Queries)(nil)

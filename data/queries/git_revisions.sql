@@ -4,11 +4,11 @@ SELECT
 FROM
     git_revisions;
 
--- name: InsertGitRevision :exec
+-- name: InsertGitRevision :one
 INSERT INTO
     git_revisions (git_revision)
 VALUES
-    (?);
+    (?) RETURNING *;
 
 -- name: ListGitRevisions :many
 SELECT
@@ -44,10 +44,18 @@ FROM
 WHERE
     created_at >= ?;
 
--- name: GetGitRevisionsBySubstring :many
+-- name: GetGitRevisionsByName :one
 SELECT
     *
 FROM
     git_revisions
 WHERE
-    git_revision LIKE ?;
+    git_revision = ?;
+
+-- name: ListGitRevisionsPaginated :many
+SELECT
+    *
+FROM
+    git_revisions
+LIMIT
+    ? OFFSET ?;

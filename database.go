@@ -4,10 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"math"
 
 	"github.com/rs/zerolog"
+	_ "modernc.org/sqlite"
 )
 
+// {"level":"info","git_revision":"e8ff7107e13808170243634f7e4256245c3236be","deployment":"","go_version":"go1.22.0","build_sum":"","method":"GET","url":"/home","user_agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36","elapsed_ms":0.654586,"time":"2024-05-16T08:35:39.264442297-05:00","message":"incoming request to //home"}
 // DBTX is the interface for the database/sql.Tx type
 // and is used to simplify the queries interface by
 // allowing the queries to be run within a transaction.
@@ -78,27 +81,6 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	}
 }
 
-// NewLogsDatabase creates a new logs database queries for an
-// logs database. It takes as input a sql database and returns the
-// queries struct for a logs database. additionaly, it will execute the
-// sql schema for the logs database.
-//
-// Example:
-//
-//	db, err := sql.Open("sqlite", "my.db")
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	defer db.Close()
-//	q := NewLogsDatabase(db)
-func NewLogsDatabase(db *sql.DB) (*Queries, error) {
-	if _, err := db.Exec(SQLSchema); err != nil {
-		return nil, err
-	}
-	q := New(db)
-	return q, nil
-}
-
 // Write writes the data to the database.
 // This makes the Queries type implement the io.Writer interface.
 func (q Queries) Write(p []byte) (n int, err error) {
@@ -121,16 +103,15 @@ func (q Queries) Write(p []byte) (n int, err error) {
 		return 0, err
 	}
 	err = q.InsertLogEntry(context.Background(), InsertLogEntryParams{
-		GoVersionID:   ,
-		BuildSumID:    apiLog.BuildSumID,
-		GitRevisionID: apiLog.GitRevisionID,
-		UserAgent:     apiLog.UserAgent,
-		Method:        apiLog.Method,
-		Url:           apiLog.Url,
-		ElapsedMs:     apiLog.ElapsedMs,
-		StatusCode:    apiLog.StatusCode,
-		DeploymentID:  apiLog.DeploymentID,
-		LevelID:       apiLog.LevelID,
+		GoVersionID:   goVersionId,
+		BuildSumID:    buildSumId,
+		GitRevisionID: gitRevisionId,
+		UserAgent:     log.UserAgent,
+		Method:        log.Method,
+		Url:           log.Url,
+		ElapsedNs:     int64(math.Round(log.ElapsedMs * 1000000)),
+		DeploymentID:  deploymentId,
+		LevelID:       0,
 	})
 	if err != nil {
 		return 0, err
@@ -141,11 +122,6 @@ func (q Queries) Write(p []byte) (n int, err error) {
 // WriteLevel writes the data to the database with the provided level.
 // This makes the Queries type implement the zerolog.LevelWriter interface.
 func (q Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
-	var apiLog ApiLog
-	err = json.Unmarshal(p, &apiLog)
-	if err != nil {
-		return 0, err
-	}
 	var levelID int64
 	switch level {
 	case zerolog.DebugLevel:
@@ -161,17 +137,33 @@ func (q Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
 	case zerolog.PanicLevel:
 		levelID = 6
 	}
-	// insert into database
+	type JsonLog struct {
+		Level       string  `json:"level"`
+		GitRevision string  `json:"git_revision"`
+		Deployment  string  `json:"deployment"`
+		GoVersion   string  `json:"go_version"`
+		BuildSum    string  `json:"build_sum"`
+		Method      string  `json:"method"`
+		Url         string  `json:"url"`
+		UserAgent   string  `json:"user_agent"`
+		ElapsedMs   float64 `json:"elapsed_ms"`
+		Time        string  `json:"time"`
+		Message     string  `json:"message"`
+	}
+	var log JsonLog
+	err = json.Unmarshal(p, &log)
+	if err != nil {
+		return 0, err
+	}
 	err = q.InsertLogEntry(context.Background(), InsertLogEntryParams{
-		GoVersionID:   apiLog.GoVersionID,
-		BuildSumID:    apiLog.BuildSumID,
-		GitRevisionID: apiLog.GitRevisionID,
-		UserAgent:     apiLog.UserAgent,
-		Method:        apiLog.Method,
-		Url:           apiLog.Url,
-		ElapsedMs:     apiLog.ElapsedMs,
-		StatusCode:    apiLog.StatusCode,
-		DeploymentID:  apiLog.DeploymentID,
+		GoVersionID:   goVersionId,
+		BuildSumID:    buildSumId,
+		GitRevisionID: gitRevisionId,
+		UserAgent:     log.UserAgent,
+		Method:        log.Method,
+		Url:           log.Url,
+		ElapsedNs:     int64(math.Round(log.ElapsedMs * 1000000)),
+		DeploymentID:  deploymentId,
 		LevelID:       levelID,
 	})
 	if err != nil {
