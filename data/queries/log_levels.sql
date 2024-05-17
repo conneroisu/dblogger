@@ -1,3 +1,7 @@
+-- file: log_levels.sql
+-- url: github.com/conneroisu/dblogger/data/queries/log_levels.sql
+-- description: log_levels.sql is
+
 -- name: CountLogLevels :one
 SELECT
     COUNT(*)

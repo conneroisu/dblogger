@@ -1,3 +1,6 @@
+-- file: api_logs.sql
+-- url: github.com/conneroisu/dblogger/data/queries/api_logs.sql
+-- description: api_logs.sql is
 -- name: CountLogs :one
 SELECT
     COUNT(*)
@@ -460,6 +463,9 @@ FROM
 WHERE
     elapsed_ns BETWEEN ? AND ?;
 
+-- file: build_sums.sql
+-- url: github.com/conneroisu/dblogger/data/queries/build_sums.sql
+-- description: build_sums.sql is
 -- name: CountBuildSums :one
 SELECT
     COUNT(*)
@@ -528,6 +534,9 @@ INSERT INTO
 VALUES
     (?) RETURNING id;
 
+-- file: deployments.sql
+-- url: github.com/conneroisu/dblogger/data/queries/deployments.sql
+-- description: deployments.sql is
 -- name: CountDeployments :one
 SELECT
     COUNT(*)
@@ -598,6 +607,9 @@ INSERT INTO
 VALUES
     (?) RETURNING id;
 
+-- file: git_revisions.sql
+-- url: github.com/conneroisu/dblogger/data/queries/git_revisions.sql
+-- description: git_revisions.sql is
 -- name: CountGitRevisions :one
 SELECT
     COUNT(*)
@@ -666,6 +678,9 @@ INSERT INTO
 VALUES
     (?) RETURNING id;
 
+-- file: go_versions.sql
+-- url: github.com/conneroisu/dblogger/data/queries/go_versions.sql
+-- description: go_versions.sql is
 -- name: CountGoVersions :one
 SELECT
     COUNT(*)
@@ -746,6 +761,9 @@ INSERT INTO
 VALUES
     (?, ?) RETURNING id;
 
+-- file: log_levels.sql
+-- url: github.com/conneroisu/dblogger/data/queries/log_levels.sql
+-- description: log_levels.sql is
 -- name: CountLogLevels :one
 SELECT
     COUNT(*)
@@ -786,6 +804,9 @@ FROM
 LIMIT
     ? OFFSET ?;
 
+-- file: urls.sql
+-- url: github.com/conneroisu/dblogger/data/queries/urls.sql
+-- description: urls.sql is
 -- name: CountURLs :one
 SELECT
     COUNT(*)

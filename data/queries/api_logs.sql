@@ -1,3 +1,7 @@
+-- file: api_logs.sql
+-- url: github.com/conneroisu/dblogger/data/queries/api_logs.sql
+-- description: api_logs.sql is
+
 -- name: CountLogs :one
 SELECT
     COUNT(*)

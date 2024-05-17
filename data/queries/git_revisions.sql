@@ -1,3 +1,7 @@
+-- file: git_revisions.sql
+-- url: github.com/conneroisu/dblogger/data/queries/git_revisions.sql
+-- description: git_revisions.sql is
+
 -- name: CountGitRevisions :one
 SELECT
     COUNT(*)

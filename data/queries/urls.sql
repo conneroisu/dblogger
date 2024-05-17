@@ -1,3 +1,7 @@
+-- file: urls.sql
+-- url: github.com/conneroisu/dblogger/data/queries/urls.sql
+-- description: urls.sql is
+
 -- name: CountURLs :one
 SELECT
     COUNT(*)

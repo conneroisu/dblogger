@@ -1,3 +1,7 @@
+-- file: deployments.sql
+-- url: github.com/conneroisu/dblogger/data/schemas/deployments.sql
+-- description: deployments.sql is a table that stores deployment information
+
 CREATE TABLE deployments (
     id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,

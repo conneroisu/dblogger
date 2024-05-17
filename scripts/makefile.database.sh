@@ -19,6 +19,7 @@ gum spin --spinner dot --title "Combining SQL seeds to Schema" --show-output -- 
 # Format the sql files
 gum spin --spinner dot --title "Formatting SQL Files" --show-output -- \
 	sleek ./data/combined/schema.sql ./data/combined/queries.sql ./data/combined/seeds.sql
+
 # generate the sqlc models
 gum spin --spinner dot --title "Generating SQLC Models" --show-output -- \
 	sqlc generate

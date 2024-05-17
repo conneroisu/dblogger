@@ -1,3 +1,7 @@
+-- file: deployments.sql
+-- url: github.com/conneroisu/dblogger/data/queries/deployments.sql
+-- description: deployments.sql is
+
 -- name: CountDeployments :one
 SELECT
     COUNT(*)

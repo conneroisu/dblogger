@@ -1,3 +1,7 @@
+-- file: go_versions.sql
+-- url: github.com/conneroisu/dblogger/data/queries/go_versions.sql
+-- description: go_versions.sql is
+
 -- name: CountGoVersions :one
 SELECT
     COUNT(*)

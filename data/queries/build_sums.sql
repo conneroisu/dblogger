@@ -1,3 +1,7 @@
+-- file: build_sums.sql
+-- url: github.com/conneroisu/dblogger/data/queries/build_sums.sql
+-- description: build_sums.sql is
+
 -- name: CountBuildSums :one
 SELECT
     COUNT(*)

@@ -21,52 +21,65 @@ import (
 //	if err != nil {
 //	    return err
 //	}
-//
-//	// use the count
+//	fmt.Printf("count: %v\n", count)
 type Querier interface {
-	//CountBuildSums
+	// file: build_sums.sql
+	// url: github.com/conneroisu/dblogger/data/queries/build_sums.sql
+	// description: build_sums.sql is
 	//
 	//  SELECT
 	//      COUNT(*)
 	//  FROM
 	//      build_sums
 	CountBuildSums(ctx context.Context) (int64, error)
-	//CountDeployments
+	// file: deployments.sql
+	// url: github.com/conneroisu/dblogger/data/queries/deployments.sql
+	// description: deployments.sql is
 	//
 	//  SELECT
 	//      COUNT(*)
 	//  FROM
 	//      deployments
 	CountDeployments(ctx context.Context) (int64, error)
-	//CountGitRevisions
+	// file: git_revisions.sql
+	// url: github.com/conneroisu/dblogger/data/queries/git_revisions.sql
+	// description: git_revisions.sql is
 	//
 	//  SELECT
 	//      COUNT(*)
 	//  FROM
 	//      git_revisions
 	CountGitRevisions(ctx context.Context) (int64, error)
-	//CountGoVersions
+	// file: go_versions.sql
+	// url: github.com/conneroisu/dblogger/data/queries/go_versions.sql
+	// description: go_versions.sql is
 	//
 	//  SELECT
 	//      COUNT(*)
 	//  FROM
 	//      go_versions
 	CountGoVersions(ctx context.Context) (int64, error)
-	//CountLogLevels
+	// file: log_levels.sql
+	// url: github.com/conneroisu/dblogger/data/queries/log_levels.sql
+	// description: log_levels.sql is
 	//
 	//  SELECT
 	//      COUNT(*)
 	//  FROM
 	//      log_levels
 	CountLogLevels(ctx context.Context) (int64, error)
-	//CountLogs
+	// file: api_logs.sql
+	// url: github.com/conneroisu/dblogger/data/queries/api_logs.sql
+	// description: api_logs.sql is
 	//
 	//  SELECT
 	//      COUNT(*)
 	//  FROM
 	//      api_logs
 	CountLogs(ctx context.Context) (int64, error)
-	//CountURLs
+	// file: urls.sql
+	// url: github.com/conneroisu/dblogger/data/queries/urls.sql
+	// description: urls.sql is
 	//
 	//  SELECT
 	//      COUNT(*)

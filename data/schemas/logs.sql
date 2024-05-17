@@ -1,5 +1,9 @@
+-- file: logs.sql
+-- url: github.com/conneroisu/dblogger/data/schemas/logs.sql
+-- description: logs.sql is a sqlite schema for the logs table
+
 CREATE TABLE IF NOT EXISTS api_logs (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT,
     level_id INTEGER NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     go_version_id INTEGER NOT NULL,
@@ -16,3 +20,9 @@ CREATE TABLE IF NOT EXISTS api_logs (
     FOREIGN KEY (git_revision_id) REFERENCES git_revisions (id),
     FOREIGN KEY (deployment_id) REFERENCES deployments (id)
 );
+
+CREATE INDEX IF NOT EXISTS api_logs_level_id_index ON api_logs (level_id);
+CREATE INDEX IF NOT EXISTS api_logs_go_version_id_index ON api_logs (go_version_id);
+CREATE INDEX IF NOT EXISTS api_logs_build_sum_id_index ON api_logs (build_sum_id);
+CREATE INDEX IF NOT EXISTS api_logs_git_revision_id_index ON api_logs (git_revision_id);
+CREATE INDEX IF NOT EXISTS api_logs_deployment_id_index ON api_logs (deployment_id);

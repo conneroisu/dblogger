@@ -12,7 +12,9 @@ FROM
     build_sums
 `
 
-// CountBuildSums
+// file: build_sums.sql
+// url: github.com/conneroisu/dblogger/data/queries/build_sums.sql
+// description: build_sums.sql is
 //
 //	SELECT
 //	    COUNT(*)
@@ -32,7 +34,9 @@ FROM
     deployments
 `
 
-// CountDeployments
+// file: deployments.sql
+// url: github.com/conneroisu/dblogger/data/queries/deployments.sql
+// description: deployments.sql is
 //
 //	SELECT
 //	    COUNT(*)
@@ -52,7 +56,9 @@ FROM
     git_revisions
 `
 
-// CountGitRevisions
+// file: git_revisions.sql
+// url: github.com/conneroisu/dblogger/data/queries/git_revisions.sql
+// description: git_revisions.sql is
 //
 //	SELECT
 //	    COUNT(*)
@@ -72,7 +78,9 @@ FROM
     go_versions
 `
 
-// CountGoVersions
+// file: go_versions.sql
+// url: github.com/conneroisu/dblogger/data/queries/go_versions.sql
+// description: go_versions.sql is
 //
 //	SELECT
 //	    COUNT(*)
@@ -92,7 +100,9 @@ FROM
     log_levels
 `
 
-// CountLogLevels
+// file: log_levels.sql
+// url: github.com/conneroisu/dblogger/data/queries/log_levels.sql
+// description: log_levels.sql is
 //
 //	SELECT
 //	    COUNT(*)
@@ -112,7 +122,9 @@ FROM
     api_logs
 `
 
-// CountLogs
+// file: api_logs.sql
+// url: github.com/conneroisu/dblogger/data/queries/api_logs.sql
+// description: api_logs.sql is
 //
 //	SELECT
 //	    COUNT(*)
@@ -132,7 +144,9 @@ FROM
     urls
 `
 
-// CountURLs
+// file: urls.sql
+// url: github.com/conneroisu/dblogger/data/queries/urls.sql
+// description: urls.sql is
 //
 //	SELECT
 //	    COUNT(*)
@@ -377,7 +391,7 @@ WHERE
 `
 
 type GetBuildSumsBySubstringParams struct {
-	BuildSum string `db:"build_sum" json:"build_sum"`
+	BuildSum interface{} `db:"build_sum" json:"build_sum"`
 }
 
 // GetBuildSumsBySubstring
@@ -1456,7 +1470,7 @@ VALUES
 `
 
 type InsertBuildSumParams struct {
-	BuildSum string `db:"build_sum" json:"build_sum"`
+	BuildSum interface{} `db:"build_sum" json:"build_sum"`
 }
 
 // InsertBuildSum
@@ -1480,7 +1494,7 @@ VALUES
 `
 
 type InsertBuildSumReturningIDParams struct {
-	BuildSum string `db:"build_sum" json:"build_sum"`
+	BuildSum interface{} `db:"build_sum" json:"build_sum"`
 }
 
 // InsertBuildSumReturningID
@@ -1504,7 +1518,7 @@ VALUES
 `
 
 type InsertBuildSumWithParamParams struct {
-	BuildSum string `db:"build_sum" json:"build_sum"`
+	BuildSum interface{} `db:"build_sum" json:"build_sum"`
 }
 
 // InsertBuildSumWithParam
@@ -2544,18 +2558,18 @@ FROM
 `
 
 type ListLogsWithJoinRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoin
@@ -2646,18 +2660,18 @@ type ListLogsWithJoinByBuildSumIDParams struct {
 }
 
 type ListLogsWithJoinByBuildSumIDRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByBuildSumID
@@ -2750,18 +2764,18 @@ type ListLogsWithJoinByBuildSumIDPaginatedParams struct {
 }
 
 type ListLogsWithJoinByBuildSumIDPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByBuildSumIDPaginated
@@ -2863,18 +2877,18 @@ type ListLogsWithJoinByDateParams struct {
 }
 
 type ListLogsWithJoinByDateRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByDate
@@ -2991,18 +3005,18 @@ type ListLogsWithJoinByDatePaginatedParams struct {
 }
 
 type ListLogsWithJoinByDatePaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByDatePaginated
@@ -3119,18 +3133,18 @@ type ListLogsWithJoinByDateRangeParams struct {
 }
 
 type ListLogsWithJoinByDateRangeRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByDateRange
@@ -3247,18 +3261,18 @@ type ListLogsWithJoinByDateRangePaginatedParams struct {
 }
 
 type ListLogsWithJoinByDateRangePaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByDateRangePaginated
@@ -3367,18 +3381,18 @@ type ListLogsWithJoinByElapsedRangeParams struct {
 }
 
 type ListLogsWithJoinByElapsedRangeRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByElapsedRange
@@ -3476,18 +3490,18 @@ type ListLogsWithJoinByElapsedRangePaginatedParams struct {
 }
 
 type ListLogsWithJoinByElapsedRangePaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByElapsedRangePaginated
@@ -3587,18 +3601,18 @@ type ListLogsWithJoinByGitRevisionIDParams struct {
 }
 
 type ListLogsWithJoinByGitRevisionIDRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByGitRevisionID
@@ -3691,18 +3705,18 @@ type ListLogsWithJoinByGitRevisionIDPaginatedParams struct {
 }
 
 type ListLogsWithJoinByGitRevisionIDPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByGitRevisionIDPaginated
@@ -3795,18 +3809,18 @@ type ListLogsWithJoinByGoVersionIDParams struct {
 }
 
 type ListLogsWithJoinByGoVersionIDRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByGoVersionID
@@ -3899,18 +3913,18 @@ type ListLogsWithJoinByGoVersionIDPaginatedParams struct {
 }
 
 type ListLogsWithJoinByGoVersionIDPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinByGoVersionIDPaginated
@@ -4004,18 +4018,18 @@ type ListLogsWithJoinPaginatedParams struct {
 }
 
 type ListLogsWithJoinPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
-	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	ID            int64       `db:"id" json:"id"`
+	CreatedAt     string      `db:"created_at" json:"created_at"`
+	UserAgent     string      `db:"user_agent" json:"user_agent"`
+	Method        string      `db:"method" json:"method"`
+	Url           string      `db:"url" json:"url"`
+	ElapsedNs     int64       `db:"elapsed_ns" json:"elapsed_ns"`
+	LevelID       int64       `db:"level_id" json:"level_id"`
+	LevelName     string      `db:"level_name" json:"level_name"`
+	GoVersionName string      `db:"go_version_name" json:"go_version_name"`
+	GoVersion     string      `db:"go_version" json:"go_version"`
+	BuildSum      interface{} `db:"build_sum" json:"build_sum"`
+	GitRevision   string      `db:"git_revision" json:"git_revision"`
 }
 
 // ListLogsWithJoinPaginated
