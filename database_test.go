@@ -8,8 +8,9 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+// TestQueries tests the database queries by writing a log message to the database
 func TestQueries(t *testing.T) {
-	db, err := sql.Open("sqlite", "test.db")
+	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
 		t.Fatal(err)
 	}

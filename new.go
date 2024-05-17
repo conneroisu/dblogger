@@ -6,6 +6,7 @@ import (
 	_ "embed"
 	"fmt"
 	"runtime/debug"
+	"strings"
 )
 
 //go:embed data/combined/schema.sql
@@ -67,7 +68,7 @@ func NewLogsDatabase(getenv func(string) (string, error), db *sql.DB) (*Queries,
 	_, err := db.Exec(SQLSchema)
 	q := New(db)
 	if err != nil {
-		if err != sql.ErrNoRows && !isAlreadyExistsError(err) {
+		if err != sql.ErrNoRows && !strings.Contains(err.Error(), "already exists") {
 			return nil, fmt.Errorf("failed to create database: %w", err)
 		}
 	}
