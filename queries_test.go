@@ -65,11 +65,19 @@ func TestQueries_CountBuildSums(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := q.CountBuildSums(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Queries.CountBuildSums() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf(
+					"Queries.CountBuildSums() error = %v, wantErr %v",
+					err,
+					tt.wantErr,
+				)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Queries.CountBuildSums() = %v, want %v", got, tt.want)
+				t.Errorf(
+					"Queries.CountBuildSums() = %v, want %v",
+					got,
+					tt.want,
+				)
 			}
 		})
 	}
@@ -104,11 +112,19 @@ func TestQueries_CountDeployments(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := q.CountDeployments(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Queries.CountDeployments() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf(
+					"Queries.CountDeployments() error = %v, wantErr %v",
+					err,
+					tt.wantErr,
+				)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Queries.CountDeployments() = %v, want %v", got, tt.want)
+				t.Errorf(
+					"Queries.CountDeployments() = %v, want %v",
+					got,
+					tt.want,
+				)
 			}
 		})
 	}
@@ -145,11 +161,19 @@ func TestQueries_CountGitRevisions(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := q.CountGitRevisions(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Queries.CountGitRevisions() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf(
+					"Queries.CountGitRevisions() error = %v, wantErr %v",
+					err,
+					tt.wantErr,
+				)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Queries.CountGitRevisions() = %v, want %v", got, tt.want)
+				t.Errorf(
+					"Queries.CountGitRevisions() = %v, want %v",
+					got,
+					tt.want,
+				)
 			}
 		})
 	}
@@ -186,11 +210,19 @@ func TestQueries_CountGoVersions(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := q.CountGoVersions(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Queries.CountGoVersions() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf(
+					"Queries.CountGoVersions() error = %v, wantErr %v",
+					err,
+					tt.wantErr,
+				)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Queries.CountGoVersions() = %v, want %v", got, tt.want)
+				t.Errorf(
+					"Queries.CountGoVersions() = %v, want %v",
+					got,
+					tt.want,
+				)
 			}
 		})
 	}
@@ -226,11 +258,19 @@ func TestQueries_CountLogLevels(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := q.CountLogLevels(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Queries.CountLogLevels() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf(
+					"Queries.CountLogLevels() error = %v, wantErr %v",
+					err,
+					tt.wantErr,
+				)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Queries.CountLogLevels() = %v, want %v", got, tt.want)
+				t.Errorf(
+					"Queries.CountLogLevels() = %v, want %v",
+					got,
+					tt.want,
+				)
 			}
 		})
 	}
@@ -265,7 +305,11 @@ func TestQueries_CountLogs(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := q.CountLogs(tt.args.ctx)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Queries.CountLogs() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf(
+					"Queries.CountLogs() error = %v, wantErr %v",
+					err,
+					tt.wantErr,
+				)
 				return
 			}
 			if got != tt.want {

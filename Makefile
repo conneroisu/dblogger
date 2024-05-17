@@ -23,3 +23,6 @@ dev.requirements:
 
 clean:
 	@sh ./scripts/makefile.clean.sh
+
+format:
+	@sh ./scripts/makefile.format.sh

@@ -44,7 +44,7 @@ func TestQueries(t *testing.T) {
 	}
 	q, err := NewLogsDatabase(getenv, db)
 	if err != nil {
-		tracerr.PrintSourceColor(err)
+		t.Fatal(err)
 	}
 	bytesVers, err := os.ReadFile("./testdata/valid_log.json")
 	if err != nil {
@@ -88,21 +88,30 @@ func TestTx(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = qtx.InsertBuildSumReturningID(context.Background(), &InsertBuildSumReturningIDParams{
-		BuildSum: "test",
-	})
+	_, err = qtx.InsertBuildSumReturningID(
+		context.Background(),
+		&InsertBuildSumReturningIDParams{
+			BuildSum: "test",
+		},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = qtx.InsertDeploymentReturningID(context.Background(), &InsertDeploymentReturningIDParams{
-		Name: "test",
-	})
+	_, err = qtx.InsertDeploymentReturningID(
+		context.Background(),
+		&InsertDeploymentReturningIDParams{
+			Name: "test",
+		},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = qtx.InsertGitRevisionReturningID(context.Background(), &InsertGitRevisionReturningIDParams{
-		GitRevision: "test",
-	})
+	_, err = qtx.InsertGitRevisionReturningID(
+		context.Background(),
+		&InsertGitRevisionReturningIDParams{
+			GitRevision: "test",
+		},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -144,7 +153,7 @@ func TestQueriesParallel(t *testing.T) {
 	})
 	t.Run("write2", func(t *testing.T) {
 		t.Parallel()
-		n, err := q.Write(bytesVers)
+		n, err := q.WriteLevel(zerolog.InfoLevel, bytesVers)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -152,7 +161,7 @@ func TestQueriesParallel(t *testing.T) {
 	})
 	t.Run("write3", func(t *testing.T) {
 		t.Parallel()
-		n, err := q.Write(bytesVers)
+		n, err := q.WriteLevel(zerolog.WarnLevel, bytesVers)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -160,7 +169,7 @@ func TestQueriesParallel(t *testing.T) {
 	})
 	t.Run("write4", func(t *testing.T) {
 		t.Parallel()
-		n, err := q.Write(bytesVers)
+		n, err := q.WriteLevel(zerolog.ErrorLevel, bytesVers)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -168,7 +177,7 @@ func TestQueriesParallel(t *testing.T) {
 	})
 	t.Run("write5", func(t *testing.T) {
 		t.Parallel()
-		n, err := q.Write(bytesVers)
+		n, err := q.WriteLevel(zerolog.FatalLevel, bytesVers)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -176,7 +185,7 @@ func TestQueriesParallel(t *testing.T) {
 	})
 	t.Run("write6", func(t *testing.T) {
 		t.Parallel()
-		n, err := q.Write(bytesVers)
+		n, err := q.WriteLevel(zerolog.PanicLevel, bytesVers)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -254,7 +263,7 @@ func TestQueriesNoUrl(t *testing.T) {
 }
 
 // TestQueries tests the database queries by writing a log message to the database
-func TestQueriesInvalid(t *testing.T) {
+func TestQueriesInvalidWrite(t *testing.T) {
 	t.Parallel()
 	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
@@ -277,6 +286,35 @@ func TestQueriesInvalid(t *testing.T) {
 		t.Fatal(fmt.Errorf("failed to read test data: %w", err))
 	}
 	_, err = q.Write(bytesVers)
+	if err == nil {
+		t.Fatal(err)
+	}
+}
+
+// TestQueries tests the database queries by writing a log message to the database
+func TestQueriesInvalidWriteLevel(t *testing.T) {
+	t.Parallel()
+	db, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to open database: %w", err))
+	}
+	getenv := func(key string) (string, error) {
+		switch key {
+		case "DEPLOYMENT":
+			return "staging", nil
+		default:
+			return "", fmt.Errorf("invalid key: %s", key)
+		}
+	}
+	q, err := NewLogsDatabase(getenv, db)
+	if err != nil {
+		tracerr.PrintSourceColor(err)
+	}
+	bytesVers, err := os.ReadFile("./testdata/invalid_log.json")
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to read test data: %w", err))
+	}
+	_, err = q.WriteLevel(zerolog.DebugLevel, bytesVers)
 	if err == nil {
 		t.Fatal(err)
 	}

@@ -176,7 +176,10 @@ type DeleteBuildSumByIDParams struct {
 //	    build_sums
 //	WHERE
 //	    id = ?
-func (q *Queries) DeleteBuildSumByID(ctx context.Context, arg *DeleteBuildSumByIDParams) error {
+func (q *Queries) DeleteBuildSumByID(
+	ctx context.Context,
+	arg *DeleteBuildSumByIDParams,
+) error {
 	_, err := q.db.ExecContext(ctx, deleteBuildSumByID, arg.ID)
 	return err
 }
@@ -198,7 +201,10 @@ type DeleteDeploymentByIDParams struct {
 //	    deployments
 //	WHERE
 //	    id = ?
-func (q *Queries) DeleteDeploymentByID(ctx context.Context, arg *DeleteDeploymentByIDParams) error {
+func (q *Queries) DeleteDeploymentByID(
+	ctx context.Context,
+	arg *DeleteDeploymentByIDParams,
+) error {
 	_, err := q.db.ExecContext(ctx, deleteDeploymentByID, arg.ID)
 	return err
 }
@@ -220,7 +226,10 @@ type DeleteGitRevisionByIDParams struct {
 //	    git_revisions
 //	WHERE
 //	    id = ?
-func (q *Queries) DeleteGitRevisionByID(ctx context.Context, arg *DeleteGitRevisionByIDParams) error {
+func (q *Queries) DeleteGitRevisionByID(
+	ctx context.Context,
+	arg *DeleteGitRevisionByIDParams,
+) error {
 	_, err := q.db.ExecContext(ctx, deleteGitRevisionByID, arg.ID)
 	return err
 }
@@ -260,7 +269,10 @@ type DeleteLogByIDParams struct {
 //	    api_logs
 //	WHERE
 //	    id = ?
-func (q *Queries) DeleteLogByID(ctx context.Context, arg *DeleteLogByIDParams) error {
+func (q *Queries) DeleteLogByID(
+	ctx context.Context,
+	arg *DeleteLogByIDParams,
+) error {
 	_, err := q.db.ExecContext(ctx, deleteLogByID, arg.ID)
 	return err
 }
@@ -282,7 +294,10 @@ type DeleteLogLevelByIDParams struct {
 //	    log_levels
 //	WHERE
 //	    id = ?
-func (q *Queries) DeleteLogLevelByID(ctx context.Context, arg *DeleteLogLevelByIDParams) error {
+func (q *Queries) DeleteLogLevelByID(
+	ctx context.Context,
+	arg *DeleteLogLevelByIDParams,
+) error {
 	_, err := q.db.ExecContext(ctx, deleteLogLevelByID, arg.ID)
 	return err
 }
@@ -304,7 +319,10 @@ type DeleteURLByIDParams struct {
 //	    urls
 //	WHERE
 //	    id = ?
-func (q *Queries) DeleteURLByID(ctx context.Context, arg *DeleteURLByIDParams) error {
+func (q *Queries) DeleteURLByID(
+	ctx context.Context,
+	arg *DeleteURLByIDParams,
+) error {
 	_, err := q.db.ExecContext(ctx, deleteURLByID, arg.ID)
 	return err
 }
@@ -330,7 +348,10 @@ type GetBuildSumByIDParams struct {
 //	    build_sums
 //	WHERE
 //	    id = ?
-func (q *Queries) GetBuildSumByID(ctx context.Context, arg *GetBuildSumByIDParams) (BuildSum, error) {
+func (q *Queries) GetBuildSumByID(
+	ctx context.Context,
+	arg *GetBuildSumByIDParams,
+) (BuildSum, error) {
 	row := q.db.QueryRowContext(ctx, getBuildSumByID, arg.ID)
 	var i BuildSum
 	err := row.Scan(&i.ID, &i.BuildSum, &i.CreatedAt)
@@ -358,7 +379,10 @@ type GetBuildSumsByDateParams struct {
 //	    build_sums
 //	WHERE
 //	    created_at >= ?
-func (q *Queries) GetBuildSumsByDate(ctx context.Context, arg *GetBuildSumsByDateParams) ([]BuildSum, error) {
+func (q *Queries) GetBuildSumsByDate(
+	ctx context.Context,
+	arg *GetBuildSumsByDateParams,
+) ([]BuildSum, error) {
 	rows, err := q.db.QueryContext(ctx, getBuildSumsByDate, arg.CreatedAt)
 	if err != nil {
 		return nil, err
@@ -402,7 +426,10 @@ type GetBuildSumsBySubstringParams struct {
 //	    build_sums
 //	WHERE
 //	    build_sum LIKE ?
-func (q *Queries) GetBuildSumsBySubstring(ctx context.Context, arg *GetBuildSumsBySubstringParams) ([]BuildSum, error) {
+func (q *Queries) GetBuildSumsBySubstring(
+	ctx context.Context,
+	arg *GetBuildSumsBySubstringParams,
+) ([]BuildSum, error) {
 	rows, err := q.db.QueryContext(ctx, getBuildSumsBySubstring, arg.BuildSum)
 	if err != nil {
 		return nil, err
@@ -446,7 +473,10 @@ type GetDeploymentByIDParams struct {
 //	    deployments
 //	WHERE
 //	    id = ?
-func (q *Queries) GetDeploymentByID(ctx context.Context, arg *GetDeploymentByIDParams) (Deployment, error) {
+func (q *Queries) GetDeploymentByID(
+	ctx context.Context,
+	arg *GetDeploymentByIDParams,
+) (Deployment, error) {
 	row := q.db.QueryRowContext(ctx, getDeploymentByID, arg.ID)
 	var i Deployment
 	err := row.Scan(
@@ -479,7 +509,10 @@ type GetDeploymentsByDateParams struct {
 //	    deployments
 //	WHERE
 //	    created_at >= ?
-func (q *Queries) GetDeploymentsByDate(ctx context.Context, arg *GetDeploymentsByDateParams) ([]Deployment, error) {
+func (q *Queries) GetDeploymentsByDate(
+	ctx context.Context,
+	arg *GetDeploymentsByDateParams,
+) ([]Deployment, error) {
 	rows, err := q.db.QueryContext(ctx, getDeploymentsByDate, arg.CreatedAt)
 	if err != nil {
 		return nil, err
@@ -518,7 +551,7 @@ WHERE
 
 type GetDeploymentsByDateRangeParams struct {
 	FromCreatedAt string `db:"from_created_at" json:"from_created_at"`
-	ToCreatedAt   string `db:"to_created_at" json:"to_created_at"`
+	ToCreatedAt   string `db:"to_created_at"   json:"to_created_at"`
 }
 
 // GetDeploymentsByDateRange
@@ -529,8 +562,16 @@ type GetDeploymentsByDateRangeParams struct {
 //	    deployments
 //	WHERE
 //	    created_at BETWEEN ? AND ?
-func (q *Queries) GetDeploymentsByDateRange(ctx context.Context, arg *GetDeploymentsByDateRangeParams) ([]Deployment, error) {
-	rows, err := q.db.QueryContext(ctx, getDeploymentsByDateRange, arg.FromCreatedAt, arg.ToCreatedAt)
+func (q *Queries) GetDeploymentsByDateRange(
+	ctx context.Context,
+	arg *GetDeploymentsByDateRangeParams,
+) ([]Deployment, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		getDeploymentsByDateRange,
+		arg.FromCreatedAt,
+		arg.ToCreatedAt,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -578,7 +619,10 @@ type GetDeploymentsBySubstringParams struct {
 //	    deployments
 //	WHERE
 //	    name LIKE ?
-func (q *Queries) GetDeploymentsBySubstring(ctx context.Context, arg *GetDeploymentsBySubstringParams) ([]Deployment, error) {
+func (q *Queries) GetDeploymentsBySubstring(
+	ctx context.Context,
+	arg *GetDeploymentsBySubstringParams,
+) ([]Deployment, error) {
 	rows, err := q.db.QueryContext(ctx, getDeploymentsBySubstring, arg.Name)
 	if err != nil {
 		return nil, err
@@ -627,7 +671,10 @@ type GetGitRevisionByIDParams struct {
 //	    git_revisions
 //	WHERE
 //	    id = ?
-func (q *Queries) GetGitRevisionByID(ctx context.Context, arg *GetGitRevisionByIDParams) (GitRevision, error) {
+func (q *Queries) GetGitRevisionByID(
+	ctx context.Context,
+	arg *GetGitRevisionByIDParams,
+) (GitRevision, error) {
 	row := q.db.QueryRowContext(ctx, getGitRevisionByID, arg.ID)
 	var i GitRevision
 	err := row.Scan(&i.ID, &i.GitRevision, &i.CreatedAt)
@@ -655,7 +702,10 @@ type GetGitRevisionsByDateParams struct {
 //	    git_revisions
 //	WHERE
 //	    created_at >= ?
-func (q *Queries) GetGitRevisionsByDate(ctx context.Context, arg *GetGitRevisionsByDateParams) ([]GitRevision, error) {
+func (q *Queries) GetGitRevisionsByDate(
+	ctx context.Context,
+	arg *GetGitRevisionsByDateParams,
+) ([]GitRevision, error) {
 	rows, err := q.db.QueryContext(ctx, getGitRevisionsByDate, arg.CreatedAt)
 	if err != nil {
 		return nil, err
@@ -699,7 +749,10 @@ type GetGitRevisionsByNameParams struct {
 //	    git_revisions
 //	WHERE
 //	    git_revision = ?
-func (q *Queries) GetGitRevisionsByName(ctx context.Context, arg *GetGitRevisionsByNameParams) (GitRevision, error) {
+func (q *Queries) GetGitRevisionsByName(
+	ctx context.Context,
+	arg *GetGitRevisionsByNameParams,
+) (GitRevision, error) {
 	row := q.db.QueryRowContext(ctx, getGitRevisionsByName, arg.GitRevision)
 	var i GitRevision
 	err := row.Scan(&i.ID, &i.GitRevision, &i.CreatedAt)
@@ -727,7 +780,10 @@ type GetGoVersionByIDParams struct {
 //	    go_versions
 //	WHERE
 //	    id = ?
-func (q *Queries) GetGoVersionByID(ctx context.Context, arg *GetGoVersionByIDParams) (GoVersion, error) {
+func (q *Queries) GetGoVersionByID(
+	ctx context.Context,
+	arg *GetGoVersionByIDParams,
+) (GoVersion, error) {
 	row := q.db.QueryRowContext(ctx, getGoVersionByID, arg.ID)
 	var i GoVersion
 	err := row.Scan(
@@ -760,7 +816,10 @@ type GetGoVersionIdByNameParams struct {
 //	    go_versions
 //	WHERE
 //	    name = ?
-func (q *Queries) GetGoVersionIdByName(ctx context.Context, arg *GetGoVersionIdByNameParams) (int64, error) {
+func (q *Queries) GetGoVersionIdByName(
+	ctx context.Context,
+	arg *GetGoVersionIdByNameParams,
+) (int64, error) {
 	row := q.db.QueryRowContext(ctx, getGoVersionIdByName, arg.Name)
 	var id int64
 	err := row.Scan(&id)
@@ -788,7 +847,10 @@ type GetGoVersionsByDateParams struct {
 //	    go_versions
 //	WHERE
 //	    created_at >= ?
-func (q *Queries) GetGoVersionsByDate(ctx context.Context, arg *GetGoVersionsByDateParams) ([]GoVersion, error) {
+func (q *Queries) GetGoVersionsByDate(
+	ctx context.Context,
+	arg *GetGoVersionsByDateParams,
+) ([]GoVersion, error) {
 	rows, err := q.db.QueryContext(ctx, getGoVersionsByDate, arg.CreatedAt)
 	if err != nil {
 		return nil, err
@@ -827,7 +889,7 @@ WHERE
 `
 
 type GetGoVersionsBySubstringParams struct {
-	Name    string `db:"name" json:"name"`
+	Name    string `db:"name"    json:"name"`
 	Version string `db:"version" json:"version"`
 }
 
@@ -840,8 +902,16 @@ type GetGoVersionsBySubstringParams struct {
 //	WHERE
 //	    name LIKE ?
 //	    OR version LIKE ?
-func (q *Queries) GetGoVersionsBySubstring(ctx context.Context, arg *GetGoVersionsBySubstringParams) ([]GoVersion, error) {
-	rows, err := q.db.QueryContext(ctx, getGoVersionsBySubstring, arg.Name, arg.Version)
+func (q *Queries) GetGoVersionsBySubstring(
+	ctx context.Context,
+	arg *GetGoVersionsBySubstringParams,
+) ([]GoVersion, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		getGoVersionsBySubstring,
+		arg.Name,
+		arg.Version,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -889,7 +959,10 @@ type GetLogByIDParams struct {
 //	    api_logs
 //	WHERE
 //	    id = ?
-func (q *Queries) GetLogByID(ctx context.Context, arg *GetLogByIDParams) (ApiLog, error) {
+func (q *Queries) GetLogByID(
+	ctx context.Context,
+	arg *GetLogByIDParams,
+) (ApiLog, error) {
 	row := q.db.QueryRowContext(ctx, getLogByID, arg.ID)
 	var i ApiLog
 	err := row.Scan(
@@ -929,7 +1002,10 @@ type GetLogLevelsBySubstringParams struct {
 //	    log_levels
 //	WHERE
 //	    name LIKE ?
-func (q *Queries) GetLogLevelsBySubstring(ctx context.Context, arg *GetLogLevelsBySubstringParams) ([]LogLevel, error) {
+func (q *Queries) GetLogLevelsBySubstring(
+	ctx context.Context,
+	arg *GetLogLevelsBySubstringParams,
+) ([]LogLevel, error) {
 	rows, err := q.db.QueryContext(ctx, getLogLevelsBySubstring, arg.Name)
 	if err != nil {
 		return nil, err
@@ -973,7 +1049,10 @@ type GetLogsByBuildSumIDParams struct {
 //	    api_logs
 //	WHERE
 //	    build_sum_id = ?
-func (q *Queries) GetLogsByBuildSumID(ctx context.Context, arg *GetLogsByBuildSumIDParams) ([]ApiLog, error) {
+func (q *Queries) GetLogsByBuildSumID(
+	ctx context.Context,
+	arg *GetLogsByBuildSumIDParams,
+) ([]ApiLog, error) {
 	rows, err := q.db.QueryContext(ctx, getLogsByBuildSumID, arg.BuildSumID)
 	if err != nil {
 		return nil, err
@@ -1029,7 +1108,10 @@ type GetLogsByDateParams struct {
 //	    api_logs
 //	WHERE
 //	    created_at >= ?
-func (q *Queries) GetLogsByDate(ctx context.Context, arg *GetLogsByDateParams) ([]ApiLog, error) {
+func (q *Queries) GetLogsByDate(
+	ctx context.Context,
+	arg *GetLogsByDateParams,
+) ([]ApiLog, error) {
 	rows, err := q.db.QueryContext(ctx, getLogsByDate, arg.CreatedAt)
 	if err != nil {
 		return nil, err
@@ -1075,7 +1157,7 @@ WHERE
 
 type GetLogsByDateRangeParams struct {
 	FromCreatedAt string `db:"from_created_at" json:"from_created_at"`
-	ToCreatedAt   string `db:"to_created_at" json:"to_created_at"`
+	ToCreatedAt   string `db:"to_created_at"   json:"to_created_at"`
 }
 
 // GetLogsByDateRange
@@ -1086,8 +1168,16 @@ type GetLogsByDateRangeParams struct {
 //	    api_logs
 //	WHERE
 //	    created_at BETWEEN ? AND ?
-func (q *Queries) GetLogsByDateRange(ctx context.Context, arg *GetLogsByDateRangeParams) ([]ApiLog, error) {
-	rows, err := q.db.QueryContext(ctx, getLogsByDateRange, arg.FromCreatedAt, arg.ToCreatedAt)
+func (q *Queries) GetLogsByDateRange(
+	ctx context.Context,
+	arg *GetLogsByDateRangeParams,
+) ([]ApiLog, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		getLogsByDateRange,
+		arg.FromCreatedAt,
+		arg.ToCreatedAt,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -1132,7 +1222,7 @@ WHERE
 
 type GetLogsByElapsedRangeParams struct {
 	FromElapsedNs int64 `db:"from_elapsed_ns" json:"from_elapsed_ns"`
-	ToElapsedNs   int64 `db:"to_elapsed_ns" json:"to_elapsed_ns"`
+	ToElapsedNs   int64 `db:"to_elapsed_ns"   json:"to_elapsed_ns"`
 }
 
 // GetLogsByElapsedRange
@@ -1143,8 +1233,16 @@ type GetLogsByElapsedRangeParams struct {
 //	    api_logs
 //	WHERE
 //	    elapsed_ns BETWEEN ? AND ?
-func (q *Queries) GetLogsByElapsedRange(ctx context.Context, arg *GetLogsByElapsedRangeParams) ([]ApiLog, error) {
-	rows, err := q.db.QueryContext(ctx, getLogsByElapsedRange, arg.FromElapsedNs, arg.ToElapsedNs)
+func (q *Queries) GetLogsByElapsedRange(
+	ctx context.Context,
+	arg *GetLogsByElapsedRangeParams,
+) ([]ApiLog, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		getLogsByElapsedRange,
+		arg.FromElapsedNs,
+		arg.ToElapsedNs,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -1199,8 +1297,15 @@ type GetLogsByGitRevisionIDParams struct {
 //	    api_logs
 //	WHERE
 //	    git_revision_id = ?
-func (q *Queries) GetLogsByGitRevisionID(ctx context.Context, arg *GetLogsByGitRevisionIDParams) ([]ApiLog, error) {
-	rows, err := q.db.QueryContext(ctx, getLogsByGitRevisionID, arg.GitRevisionID)
+func (q *Queries) GetLogsByGitRevisionID(
+	ctx context.Context,
+	arg *GetLogsByGitRevisionIDParams,
+) ([]ApiLog, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		getLogsByGitRevisionID,
+		arg.GitRevisionID,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -1255,7 +1360,10 @@ type GetLogsByGoVersionIDParams struct {
 //	    api_logs
 //	WHERE
 //	    go_version_id = ?
-func (q *Queries) GetLogsByGoVersionID(ctx context.Context, arg *GetLogsByGoVersionIDParams) ([]ApiLog, error) {
+func (q *Queries) GetLogsByGoVersionID(
+	ctx context.Context,
+	arg *GetLogsByGoVersionIDParams,
+) ([]ApiLog, error) {
 	rows, err := q.db.QueryContext(ctx, getLogsByGoVersionID, arg.GoVersionID)
 	if err != nil {
 		return nil, err
@@ -1311,7 +1419,10 @@ type GetLogsByURLSubstringParams struct {
 //	    api_logs
 //	WHERE
 //	    url LIKE ?
-func (q *Queries) GetLogsByURLSubstring(ctx context.Context, arg *GetLogsByURLSubstringParams) ([]ApiLog, error) {
+func (q *Queries) GetLogsByURLSubstring(
+	ctx context.Context,
+	arg *GetLogsByURLSubstringParams,
+) ([]ApiLog, error) {
 	rows, err := q.db.QueryContext(ctx, getLogsByURLSubstring, arg.Url)
 	if err != nil {
 		return nil, err
@@ -1367,7 +1478,10 @@ type GetURLByIDParams struct {
 //	    urls
 //	WHERE
 //	    id = ?
-func (q *Queries) GetURLByID(ctx context.Context, arg *GetURLByIDParams) (Url, error) {
+func (q *Queries) GetURLByID(
+	ctx context.Context,
+	arg *GetURLByIDParams,
+) (Url, error) {
 	row := q.db.QueryRowContext(ctx, getURLByID, arg.ID)
 	var i Url
 	err := row.Scan(&i.ID, &i.Url, &i.CreatedAt)
@@ -1395,7 +1509,10 @@ type GetURLsByDateParams struct {
 //	    urls
 //	WHERE
 //	    created_at >= ?
-func (q *Queries) GetURLsByDate(ctx context.Context, arg *GetURLsByDateParams) ([]Url, error) {
+func (q *Queries) GetURLsByDate(
+	ctx context.Context,
+	arg *GetURLsByDateParams,
+) ([]Url, error) {
 	rows, err := q.db.QueryContext(ctx, getURLsByDate, arg.CreatedAt)
 	if err != nil {
 		return nil, err
@@ -1439,7 +1556,10 @@ type GetURLsBySubstringParams struct {
 //	    urls
 //	WHERE
 //	    url LIKE ?
-func (q *Queries) GetURLsBySubstring(ctx context.Context, arg *GetURLsBySubstringParams) ([]Url, error) {
+func (q *Queries) GetURLsBySubstring(
+	ctx context.Context,
+	arg *GetURLsBySubstringParams,
+) ([]Url, error) {
 	rows, err := q.db.QueryContext(ctx, getURLsBySubstring, arg.Url)
 	if err != nil {
 		return nil, err
@@ -1479,7 +1599,10 @@ type InsertBuildSumParams struct {
 //	    build_sums (build_sum)
 //	VALUES
 //	    (?) RETURNING id, build_sum, created_at
-func (q *Queries) InsertBuildSum(ctx context.Context, arg *InsertBuildSumParams) (BuildSum, error) {
+func (q *Queries) InsertBuildSum(
+	ctx context.Context,
+	arg *InsertBuildSumParams,
+) (BuildSum, error) {
 	row := q.db.QueryRowContext(ctx, insertBuildSum, arg.BuildSum)
 	var i BuildSum
 	err := row.Scan(&i.ID, &i.BuildSum, &i.CreatedAt)
@@ -1503,7 +1626,10 @@ type InsertBuildSumReturningIDParams struct {
 //	    build_sums (build_sum)
 //	VALUES
 //	    (?) RETURNING id
-func (q *Queries) InsertBuildSumReturningID(ctx context.Context, arg *InsertBuildSumReturningIDParams) (int64, error) {
+func (q *Queries) InsertBuildSumReturningID(
+	ctx context.Context,
+	arg *InsertBuildSumReturningIDParams,
+) (int64, error) {
 	row := q.db.QueryRowContext(ctx, insertBuildSumReturningID, arg.BuildSum)
 	var id int64
 	err := row.Scan(&id)
@@ -1527,7 +1653,10 @@ type InsertBuildSumWithParamParams struct {
 //	    build_sums (build_sum)
 //	VALUES
 //	    (?)
-func (q *Queries) InsertBuildSumWithParam(ctx context.Context, arg *InsertBuildSumWithParamParams) error {
+func (q *Queries) InsertBuildSumWithParam(
+	ctx context.Context,
+	arg *InsertBuildSumWithParamParams,
+) error {
 	_, err := q.db.ExecContext(ctx, insertBuildSumWithParam, arg.BuildSum)
 	return err
 }
@@ -1549,7 +1678,10 @@ type InsertDeploymentParams struct {
 //	    deployments (name)
 //	VALUES
 //	    (?) RETURNING id, name, created_at, updated_at
-func (q *Queries) InsertDeployment(ctx context.Context, arg *InsertDeploymentParams) (Deployment, error) {
+func (q *Queries) InsertDeployment(
+	ctx context.Context,
+	arg *InsertDeploymentParams,
+) (Deployment, error) {
 	row := q.db.QueryRowContext(ctx, insertDeployment, arg.Name)
 	var i Deployment
 	err := row.Scan(
@@ -1578,7 +1710,10 @@ type InsertDeploymentReturningIDParams struct {
 //	    deployments (name)
 //	VALUES
 //	    (?) RETURNING id
-func (q *Queries) InsertDeploymentReturningID(ctx context.Context, arg *InsertDeploymentReturningIDParams) (int64, error) {
+func (q *Queries) InsertDeploymentReturningID(
+	ctx context.Context,
+	arg *InsertDeploymentReturningIDParams,
+) (int64, error) {
 	row := q.db.QueryRowContext(ctx, insertDeploymentReturningID, arg.Name)
 	var id int64
 	err := row.Scan(&id)
@@ -1602,7 +1737,10 @@ type InsertGitRevisionParams struct {
 //	    git_revisions (git_revision)
 //	VALUES
 //	    (?) RETURNING id, git_revision, created_at
-func (q *Queries) InsertGitRevision(ctx context.Context, arg *InsertGitRevisionParams) (GitRevision, error) {
+func (q *Queries) InsertGitRevision(
+	ctx context.Context,
+	arg *InsertGitRevisionParams,
+) (GitRevision, error) {
 	row := q.db.QueryRowContext(ctx, insertGitRevision, arg.GitRevision)
 	var i GitRevision
 	err := row.Scan(&i.ID, &i.GitRevision, &i.CreatedAt)
@@ -1626,8 +1764,15 @@ type InsertGitRevisionReturningIDParams struct {
 //	    git_revisions (git_revision)
 //	VALUES
 //	    (?) RETURNING id
-func (q *Queries) InsertGitRevisionReturningID(ctx context.Context, arg *InsertGitRevisionReturningIDParams) (int64, error) {
-	row := q.db.QueryRowContext(ctx, insertGitRevisionReturningID, arg.GitRevision)
+func (q *Queries) InsertGitRevisionReturningID(
+	ctx context.Context,
+	arg *InsertGitRevisionReturningIDParams,
+) (int64, error) {
+	row := q.db.QueryRowContext(
+		ctx,
+		insertGitRevisionReturningID,
+		arg.GitRevision,
+	)
 	var id int64
 	err := row.Scan(&id)
 	return id, err
@@ -1650,8 +1795,15 @@ type InsertGitRevisionWithParamParams struct {
 //	    git_revisions (git_revision)
 //	VALUES
 //	    (?)
-func (q *Queries) InsertGitRevisionWithParam(ctx context.Context, arg *InsertGitRevisionWithParamParams) error {
-	_, err := q.db.ExecContext(ctx, insertGitRevisionWithParam, arg.GitRevision)
+func (q *Queries) InsertGitRevisionWithParam(
+	ctx context.Context,
+	arg *InsertGitRevisionWithParamParams,
+) error {
+	_, err := q.db.ExecContext(
+		ctx,
+		insertGitRevisionWithParam,
+		arg.GitRevision,
+	)
 	return err
 }
 
@@ -1663,7 +1815,7 @@ VALUES
 `
 
 type InsertGoVersionParams struct {
-	Name    string `db:"name" json:"name"`
+	Name    string `db:"name"    json:"name"`
 	Version string `db:"version" json:"version"`
 }
 
@@ -1673,7 +1825,10 @@ type InsertGoVersionParams struct {
 //	    go_versions (name, version)
 //	VALUES
 //	    (?, ?) RETURNING id, name, version, created_at
-func (q *Queries) InsertGoVersion(ctx context.Context, arg *InsertGoVersionParams) (GoVersion, error) {
+func (q *Queries) InsertGoVersion(
+	ctx context.Context,
+	arg *InsertGoVersionParams,
+) (GoVersion, error) {
 	row := q.db.QueryRowContext(ctx, insertGoVersion, arg.Name, arg.Version)
 	var i GoVersion
 	err := row.Scan(
@@ -1693,7 +1848,7 @@ VALUES
 `
 
 type InsertGoVersionReturningIDParams struct {
-	Name    string `db:"name" json:"name"`
+	Name    string `db:"name"    json:"name"`
 	Version string `db:"version" json:"version"`
 }
 
@@ -1703,8 +1858,16 @@ type InsertGoVersionReturningIDParams struct {
 //	    go_versions (name, version)
 //	VALUES
 //	    (?, ?) RETURNING id
-func (q *Queries) InsertGoVersionReturningID(ctx context.Context, arg *InsertGoVersionReturningIDParams) (int64, error) {
-	row := q.db.QueryRowContext(ctx, insertGoVersionReturningID, arg.Name, arg.Version)
+func (q *Queries) InsertGoVersionReturningID(
+	ctx context.Context,
+	arg *InsertGoVersionReturningIDParams,
+) (int64, error) {
+	row := q.db.QueryRowContext(
+		ctx,
+		insertGoVersionReturningID,
+		arg.Name,
+		arg.Version,
+	)
 	var id int64
 	err := row.Scan(&id)
 	return id, err
@@ -1728,15 +1891,15 @@ VALUES
 `
 
 type InsertLogEntryParams struct {
-	GoVersionID   int64  `db:"go_version_id" json:"go_version_id"`
-	BuildSumID    int64  `db:"build_sum_id" json:"build_sum_id"`
+	GoVersionID   int64  `db:"go_version_id"   json:"go_version_id"`
+	BuildSumID    int64  `db:"build_sum_id"    json:"build_sum_id"`
 	GitRevisionID int64  `db:"git_revision_id" json:"git_revision_id"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	DeploymentID  int64  `db:"deployment_id" json:"deployment_id"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	DeploymentID  int64  `db:"deployment_id"   json:"deployment_id"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
 }
 
 // InsertLogEntry
@@ -1755,7 +1918,10 @@ type InsertLogEntryParams struct {
 //	    )
 //	VALUES
 //	    (?, ?, ?, ?, ?, ?, ?, ?, ?)
-func (q *Queries) InsertLogEntry(ctx context.Context, arg *InsertLogEntryParams) error {
+func (q *Queries) InsertLogEntry(
+	ctx context.Context,
+	arg *InsertLogEntryParams,
+) error {
 	_, err := q.db.ExecContext(ctx, insertLogEntry,
 		arg.GoVersionID,
 		arg.BuildSumID,
@@ -1787,7 +1953,10 @@ type InsertLogLevelParams struct {
 //	    log_levels (name)
 //	VALUES
 //	    (?)
-func (q *Queries) InsertLogLevel(ctx context.Context, arg *InsertLogLevelParams) error {
+func (q *Queries) InsertLogLevel(
+	ctx context.Context,
+	arg *InsertLogLevelParams,
+) error {
 	_, err := q.db.ExecContext(ctx, insertLogLevel, arg.Name)
 	return err
 }
@@ -1831,7 +2000,10 @@ type InsertURLWithParamParams struct {
 //	    urls (url)
 //	VALUES
 //	    (?)
-func (q *Queries) InsertURLWithParam(ctx context.Context, arg *InsertURLWithParamParams) error {
+func (q *Queries) InsertURLWithParam(
+	ctx context.Context,
+	arg *InsertURLWithParamParams,
+) error {
 	_, err := q.db.ExecContext(ctx, insertURLWithParam, arg.Url)
 	return err
 }
@@ -1882,7 +2054,7 @@ LIMIT
 `
 
 type ListBuildSumsPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
@@ -1894,8 +2066,16 @@ type ListBuildSumsPaginatedParams struct {
 //	    build_sums
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListBuildSumsPaginated(ctx context.Context, arg *ListBuildSumsPaginatedParams) ([]BuildSum, error) {
-	rows, err := q.db.QueryContext(ctx, listBuildSumsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListBuildSumsPaginated(
+	ctx context.Context,
+	arg *ListBuildSumsPaginatedParams,
+) ([]BuildSum, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listBuildSumsPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -1968,7 +2148,7 @@ LIMIT
 `
 
 type ListDeploymentsPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
@@ -1980,8 +2160,16 @@ type ListDeploymentsPaginatedParams struct {
 //	    deployments
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListDeploymentsPaginated(ctx context.Context, arg *ListDeploymentsPaginatedParams) ([]Deployment, error) {
-	rows, err := q.db.QueryContext(ctx, listDeploymentsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListDeploymentsPaginated(
+	ctx context.Context,
+	arg *ListDeploymentsPaginatedParams,
+) ([]Deployment, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listDeploymentsPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -2021,7 +2209,9 @@ FROM
 //	    id, git_revision, created_at
 //	FROM
 //	    git_revisions
-func (q *Queries) ListGitRevisions(ctx context.Context) ([]GitRevision, error) {
+func (q *Queries) ListGitRevisions(
+	ctx context.Context,
+) ([]GitRevision, error) {
 	rows, err := q.db.QueryContext(ctx, listGitRevisions)
 	if err != nil {
 		return nil, err
@@ -2054,7 +2244,7 @@ LIMIT
 `
 
 type ListGitRevisionsPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
@@ -2066,8 +2256,16 @@ type ListGitRevisionsPaginatedParams struct {
 //	    git_revisions
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListGitRevisionsPaginated(ctx context.Context, arg *ListGitRevisionsPaginatedParams) ([]GitRevision, error) {
-	rows, err := q.db.QueryContext(ctx, listGitRevisionsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListGitRevisionsPaginated(
+	ctx context.Context,
+	arg *ListGitRevisionsPaginatedParams,
+) ([]GitRevision, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listGitRevisionsPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -2140,7 +2338,7 @@ LIMIT
 `
 
 type ListGoVersionsPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
@@ -2152,8 +2350,16 @@ type ListGoVersionsPaginatedParams struct {
 //	    go_versions
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListGoVersionsPaginated(ctx context.Context, arg *ListGoVersionsPaginatedParams) ([]GoVersion, error) {
-	rows, err := q.db.QueryContext(ctx, listGoVersionsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListGoVersionsPaginated(
+	ctx context.Context,
+	arg *ListGoVersionsPaginatedParams,
+) ([]GoVersion, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listGoVersionsPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -2226,7 +2432,7 @@ LIMIT
 `
 
 type ListLogLevelsPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
@@ -2238,8 +2444,16 @@ type ListLogLevelsPaginatedParams struct {
 //	    log_levels
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListLogLevelsPaginated(ctx context.Context, arg *ListLogLevelsPaginatedParams) ([]LogLevel, error) {
-	rows, err := q.db.QueryContext(ctx, listLogLevelsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListLogLevelsPaginated(
+	ctx context.Context,
+	arg *ListLogLevelsPaginatedParams,
+) ([]LogLevel, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogLevelsPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -2330,8 +2544,15 @@ type ListLogsByDeploymentIDParams struct {
 //	    api_logs
 //	WHERE
 //	    deployment_id = ?
-func (q *Queries) ListLogsByDeploymentID(ctx context.Context, arg *ListLogsByDeploymentIDParams) ([]ApiLog, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsByDeploymentID, arg.DeploymentID)
+func (q *Queries) ListLogsByDeploymentID(
+	ctx context.Context,
+	arg *ListLogsByDeploymentIDParams,
+) ([]ApiLog, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsByDeploymentID,
+		arg.DeploymentID,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -2386,7 +2607,10 @@ type ListLogsByMethodParams struct {
 //	    api_logs
 //	WHERE
 //	    method = ?
-func (q *Queries) ListLogsByMethod(ctx context.Context, arg *ListLogsByMethodParams) ([]ApiLog, error) {
+func (q *Queries) ListLogsByMethod(
+	ctx context.Context,
+	arg *ListLogsByMethodParams,
+) ([]ApiLog, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsByMethod, arg.Method)
 	if err != nil {
 		return nil, err
@@ -2442,7 +2666,10 @@ type ListLogsByUserAgentParams struct {
 //	    api_logs
 //	WHERE
 //	    user_agent = ?
-func (q *Queries) ListLogsByUserAgent(ctx context.Context, arg *ListLogsByUserAgentParams) ([]ApiLog, error) {
+func (q *Queries) ListLogsByUserAgent(
+	ctx context.Context,
+	arg *ListLogsByUserAgentParams,
+) ([]ApiLog, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsByUserAgent, arg.UserAgent)
 	if err != nil {
 		return nil, err
@@ -2487,7 +2714,7 @@ LIMIT
 `
 
 type ListLogsPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
@@ -2499,8 +2726,16 @@ type ListLogsPaginatedParams struct {
 //	    api_logs
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListLogsPaginated(ctx context.Context, arg *ListLogsPaginatedParams) ([]ApiLog, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListLogsPaginated(
+	ctx context.Context,
+	arg *ListLogsPaginatedParams,
+) ([]ApiLog, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -2558,18 +2793,18 @@ FROM
 `
 
 type ListLogsWithJoinRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoin
@@ -2594,7 +2829,9 @@ type ListLogsWithJoinRow struct {
 //	    JOIN go_versions gv ON l.go_version_id = gv.id
 //	    JOIN build_sums bs ON l.build_sum_id = bs.id
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
-func (q *Queries) ListLogsWithJoin(ctx context.Context) ([]ListLogsWithJoinRow, error) {
+func (q *Queries) ListLogsWithJoin(
+	ctx context.Context,
+) ([]ListLogsWithJoinRow, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsWithJoin)
 	if err != nil {
 		return nil, err
@@ -2660,18 +2897,18 @@ type ListLogsWithJoinByBuildSumIDParams struct {
 }
 
 type ListLogsWithJoinByBuildSumIDRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByBuildSumID
@@ -2698,7 +2935,10 @@ type ListLogsWithJoinByBuildSumIDRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    bs.id = ?
-func (q *Queries) ListLogsWithJoinByBuildSumID(ctx context.Context, arg *ListLogsWithJoinByBuildSumIDParams) ([]ListLogsWithJoinByBuildSumIDRow, error) {
+func (q *Queries) ListLogsWithJoinByBuildSumID(
+	ctx context.Context,
+	arg *ListLogsWithJoinByBuildSumIDParams,
+) ([]ListLogsWithJoinByBuildSumIDRow, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByBuildSumID, arg.ID)
 	if err != nil {
 		return nil, err
@@ -2764,18 +3004,18 @@ type ListLogsWithJoinByBuildSumIDPaginatedParams struct {
 }
 
 type ListLogsWithJoinByBuildSumIDPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByBuildSumIDPaginated
@@ -2802,8 +3042,15 @@ type ListLogsWithJoinByBuildSumIDPaginatedRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    bs.id = ?
-func (q *Queries) ListLogsWithJoinByBuildSumIDPaginated(ctx context.Context, arg *ListLogsWithJoinByBuildSumIDPaginatedParams) ([]ListLogsWithJoinByBuildSumIDPaginatedRow, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByBuildSumIDPaginated, arg.ID)
+func (q *Queries) ListLogsWithJoinByBuildSumIDPaginated(
+	ctx context.Context,
+	arg *ListLogsWithJoinByBuildSumIDPaginatedParams,
+) ([]ListLogsWithJoinByBuildSumIDPaginatedRow, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsWithJoinByBuildSumIDPaginated,
+		arg.ID,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -2864,31 +3111,31 @@ WHERE
 `
 
 type ListLogsWithJoinByDateParams struct {
-	FromCreatedAt   string    `db:"from_created_at" json:"from_created_at"`
+	FromCreatedAt   string    `db:"from_created_at"   json:"from_created_at"`
 	FromCreatedAt_2 string    `db:"from_created_at_2" json:"from_created_at_2"`
 	FromCreatedAt_3 string    `db:"from_created_at_3" json:"from_created_at_3"`
 	FromCreatedAt_4 time.Time `db:"from_created_at_4" json:"from_created_at_4"`
 	FromCreatedAt_5 string    `db:"from_created_at_5" json:"from_created_at_5"`
-	ToCreatedAt     string    `db:"to_created_at" json:"to_created_at"`
-	ToCreatedAt_2   string    `db:"to_created_at_2" json:"to_created_at_2"`
-	ToCreatedAt_3   string    `db:"to_created_at_3" json:"to_created_at_3"`
-	ToCreatedAt_4   time.Time `db:"to_created_at_4" json:"to_created_at_4"`
-	ToCreatedAt_5   string    `db:"to_created_at_5" json:"to_created_at_5"`
+	ToCreatedAt     string    `db:"to_created_at"     json:"to_created_at"`
+	ToCreatedAt_2   string    `db:"to_created_at_2"   json:"to_created_at_2"`
+	ToCreatedAt_3   string    `db:"to_created_at_3"   json:"to_created_at_3"`
+	ToCreatedAt_4   time.Time `db:"to_created_at_4"   json:"to_created_at_4"`
+	ToCreatedAt_5   string    `db:"to_created_at_5"   json:"to_created_at_5"`
 }
 
 type ListLogsWithJoinByDateRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByDate
@@ -2915,7 +3162,10 @@ type ListLogsWithJoinByDateRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    created_at BETWEEN ? AND ?
-func (q *Queries) ListLogsWithJoinByDate(ctx context.Context, arg *ListLogsWithJoinByDateParams) ([]ListLogsWithJoinByDateRow, error) {
+func (q *Queries) ListLogsWithJoinByDate(
+	ctx context.Context,
+	arg *ListLogsWithJoinByDateParams,
+) ([]ListLogsWithJoinByDateRow, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByDate,
 		arg.FromCreatedAt,
 		arg.FromCreatedAt_2,
@@ -2990,33 +3240,33 @@ LIMIT
 `
 
 type ListLogsWithJoinByDatePaginatedParams struct {
-	FromCreatedAt   string    `db:"from_created_at" json:"from_created_at"`
+	FromCreatedAt   string    `db:"from_created_at"   json:"from_created_at"`
 	FromCreatedAt_2 string    `db:"from_created_at_2" json:"from_created_at_2"`
 	FromCreatedAt_3 string    `db:"from_created_at_3" json:"from_created_at_3"`
 	FromCreatedAt_4 time.Time `db:"from_created_at_4" json:"from_created_at_4"`
 	FromCreatedAt_5 string    `db:"from_created_at_5" json:"from_created_at_5"`
-	ToCreatedAt     string    `db:"to_created_at" json:"to_created_at"`
-	ToCreatedAt_2   string    `db:"to_created_at_2" json:"to_created_at_2"`
-	ToCreatedAt_3   string    `db:"to_created_at_3" json:"to_created_at_3"`
-	ToCreatedAt_4   time.Time `db:"to_created_at_4" json:"to_created_at_4"`
-	ToCreatedAt_5   string    `db:"to_created_at_5" json:"to_created_at_5"`
-	Limit           int64     `db:"limit" json:"limit"`
-	Offset          int64     `db:"offset" json:"offset"`
+	ToCreatedAt     string    `db:"to_created_at"     json:"to_created_at"`
+	ToCreatedAt_2   string    `db:"to_created_at_2"   json:"to_created_at_2"`
+	ToCreatedAt_3   string    `db:"to_created_at_3"   json:"to_created_at_3"`
+	ToCreatedAt_4   time.Time `db:"to_created_at_4"   json:"to_created_at_4"`
+	ToCreatedAt_5   string    `db:"to_created_at_5"   json:"to_created_at_5"`
+	Limit           int64     `db:"limit"             json:"limit"`
+	Offset          int64     `db:"offset"            json:"offset"`
 }
 
 type ListLogsWithJoinByDatePaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByDatePaginated
@@ -3045,7 +3295,10 @@ type ListLogsWithJoinByDatePaginatedRow struct {
 //	    created_at BETWEEN ? AND ?
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListLogsWithJoinByDatePaginated(ctx context.Context, arg *ListLogsWithJoinByDatePaginatedParams) ([]ListLogsWithJoinByDatePaginatedRow, error) {
+func (q *Queries) ListLogsWithJoinByDatePaginated(
+	ctx context.Context,
+	arg *ListLogsWithJoinByDatePaginatedParams,
+) ([]ListLogsWithJoinByDatePaginatedRow, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByDatePaginated,
 		arg.FromCreatedAt,
 		arg.FromCreatedAt_2,
@@ -3120,31 +3373,31 @@ WHERE
 `
 
 type ListLogsWithJoinByDateRangeParams struct {
-	FromCreatedAt   string    `db:"from_created_at" json:"from_created_at"`
+	FromCreatedAt   string    `db:"from_created_at"   json:"from_created_at"`
 	FromCreatedAt_2 string    `db:"from_created_at_2" json:"from_created_at_2"`
 	FromCreatedAt_3 string    `db:"from_created_at_3" json:"from_created_at_3"`
 	FromCreatedAt_4 time.Time `db:"from_created_at_4" json:"from_created_at_4"`
 	FromCreatedAt_5 string    `db:"from_created_at_5" json:"from_created_at_5"`
-	ToCreatedAt     string    `db:"to_created_at" json:"to_created_at"`
-	ToCreatedAt_2   string    `db:"to_created_at_2" json:"to_created_at_2"`
-	ToCreatedAt_3   string    `db:"to_created_at_3" json:"to_created_at_3"`
-	ToCreatedAt_4   time.Time `db:"to_created_at_4" json:"to_created_at_4"`
-	ToCreatedAt_5   string    `db:"to_created_at_5" json:"to_created_at_5"`
+	ToCreatedAt     string    `db:"to_created_at"     json:"to_created_at"`
+	ToCreatedAt_2   string    `db:"to_created_at_2"   json:"to_created_at_2"`
+	ToCreatedAt_3   string    `db:"to_created_at_3"   json:"to_created_at_3"`
+	ToCreatedAt_4   time.Time `db:"to_created_at_4"   json:"to_created_at_4"`
+	ToCreatedAt_5   string    `db:"to_created_at_5"   json:"to_created_at_5"`
 }
 
 type ListLogsWithJoinByDateRangeRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByDateRange
@@ -3171,7 +3424,10 @@ type ListLogsWithJoinByDateRangeRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    created_at BETWEEN ? AND ?
-func (q *Queries) ListLogsWithJoinByDateRange(ctx context.Context, arg *ListLogsWithJoinByDateRangeParams) ([]ListLogsWithJoinByDateRangeRow, error) {
+func (q *Queries) ListLogsWithJoinByDateRange(
+	ctx context.Context,
+	arg *ListLogsWithJoinByDateRangeParams,
+) ([]ListLogsWithJoinByDateRangeRow, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByDateRange,
 		arg.FromCreatedAt,
 		arg.FromCreatedAt_2,
@@ -3246,33 +3502,33 @@ LIMIT
 `
 
 type ListLogsWithJoinByDateRangePaginatedParams struct {
-	FromCreatedAt   string    `db:"from_created_at" json:"from_created_at"`
+	FromCreatedAt   string    `db:"from_created_at"   json:"from_created_at"`
 	FromCreatedAt_2 string    `db:"from_created_at_2" json:"from_created_at_2"`
 	FromCreatedAt_3 string    `db:"from_created_at_3" json:"from_created_at_3"`
 	FromCreatedAt_4 time.Time `db:"from_created_at_4" json:"from_created_at_4"`
 	FromCreatedAt_5 string    `db:"from_created_at_5" json:"from_created_at_5"`
-	ToCreatedAt     string    `db:"to_created_at" json:"to_created_at"`
-	ToCreatedAt_2   string    `db:"to_created_at_2" json:"to_created_at_2"`
-	ToCreatedAt_3   string    `db:"to_created_at_3" json:"to_created_at_3"`
-	ToCreatedAt_4   time.Time `db:"to_created_at_4" json:"to_created_at_4"`
-	ToCreatedAt_5   string    `db:"to_created_at_5" json:"to_created_at_5"`
-	Limit           int64     `db:"limit" json:"limit"`
-	Offset          int64     `db:"offset" json:"offset"`
+	ToCreatedAt     string    `db:"to_created_at"     json:"to_created_at"`
+	ToCreatedAt_2   string    `db:"to_created_at_2"   json:"to_created_at_2"`
+	ToCreatedAt_3   string    `db:"to_created_at_3"   json:"to_created_at_3"`
+	ToCreatedAt_4   time.Time `db:"to_created_at_4"   json:"to_created_at_4"`
+	ToCreatedAt_5   string    `db:"to_created_at_5"   json:"to_created_at_5"`
+	Limit           int64     `db:"limit"             json:"limit"`
+	Offset          int64     `db:"offset"            json:"offset"`
 }
 
 type ListLogsWithJoinByDateRangePaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByDateRangePaginated
@@ -3301,7 +3557,10 @@ type ListLogsWithJoinByDateRangePaginatedRow struct {
 //	    created_at BETWEEN ? AND ?
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListLogsWithJoinByDateRangePaginated(ctx context.Context, arg *ListLogsWithJoinByDateRangePaginatedParams) ([]ListLogsWithJoinByDateRangePaginatedRow, error) {
+func (q *Queries) ListLogsWithJoinByDateRangePaginated(
+	ctx context.Context,
+	arg *ListLogsWithJoinByDateRangePaginatedParams,
+) ([]ListLogsWithJoinByDateRangePaginatedRow, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByDateRangePaginated,
 		arg.FromCreatedAt,
 		arg.FromCreatedAt_2,
@@ -3377,22 +3636,22 @@ WHERE
 
 type ListLogsWithJoinByElapsedRangeParams struct {
 	FromElapsedNs int64 `db:"from_elapsed_ns" json:"from_elapsed_ns"`
-	ToElapsedNs   int64 `db:"to_elapsed_ns" json:"to_elapsed_ns"`
+	ToElapsedNs   int64 `db:"to_elapsed_ns"   json:"to_elapsed_ns"`
 }
 
 type ListLogsWithJoinByElapsedRangeRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByElapsedRange
@@ -3419,8 +3678,16 @@ type ListLogsWithJoinByElapsedRangeRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    elapsed_ns BETWEEN ? AND ?
-func (q *Queries) ListLogsWithJoinByElapsedRange(ctx context.Context, arg *ListLogsWithJoinByElapsedRangeParams) ([]ListLogsWithJoinByElapsedRangeRow, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByElapsedRange, arg.FromElapsedNs, arg.ToElapsedNs)
+func (q *Queries) ListLogsWithJoinByElapsedRange(
+	ctx context.Context,
+	arg *ListLogsWithJoinByElapsedRangeParams,
+) ([]ListLogsWithJoinByElapsedRangeRow, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsWithJoinByElapsedRange,
+		arg.FromElapsedNs,
+		arg.ToElapsedNs,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -3484,24 +3751,24 @@ LIMIT
 
 type ListLogsWithJoinByElapsedRangePaginatedParams struct {
 	FromElapsedNs int64 `db:"from_elapsed_ns" json:"from_elapsed_ns"`
-	ToElapsedNs   int64 `db:"to_elapsed_ns" json:"to_elapsed_ns"`
-	Limit         int64 `db:"limit" json:"limit"`
-	Offset        int64 `db:"offset" json:"offset"`
+	ToElapsedNs   int64 `db:"to_elapsed_ns"   json:"to_elapsed_ns"`
+	Limit         int64 `db:"limit"           json:"limit"`
+	Offset        int64 `db:"offset"          json:"offset"`
 }
 
 type ListLogsWithJoinByElapsedRangePaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByElapsedRangePaginated
@@ -3530,8 +3797,13 @@ type ListLogsWithJoinByElapsedRangePaginatedRow struct {
 //	    elapsed_ns BETWEEN ? AND ?
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListLogsWithJoinByElapsedRangePaginated(ctx context.Context, arg *ListLogsWithJoinByElapsedRangePaginatedParams) ([]ListLogsWithJoinByElapsedRangePaginatedRow, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByElapsedRangePaginated,
+func (q *Queries) ListLogsWithJoinByElapsedRangePaginated(
+	ctx context.Context,
+	arg *ListLogsWithJoinByElapsedRangePaginatedParams,
+) ([]ListLogsWithJoinByElapsedRangePaginatedRow, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsWithJoinByElapsedRangePaginated,
 		arg.FromElapsedNs,
 		arg.ToElapsedNs,
 		arg.Limit,
@@ -3601,18 +3873,18 @@ type ListLogsWithJoinByGitRevisionIDParams struct {
 }
 
 type ListLogsWithJoinByGitRevisionIDRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByGitRevisionID
@@ -3639,8 +3911,15 @@ type ListLogsWithJoinByGitRevisionIDRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    gr.id = ?
-func (q *Queries) ListLogsWithJoinByGitRevisionID(ctx context.Context, arg *ListLogsWithJoinByGitRevisionIDParams) ([]ListLogsWithJoinByGitRevisionIDRow, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByGitRevisionID, arg.ID)
+func (q *Queries) ListLogsWithJoinByGitRevisionID(
+	ctx context.Context,
+	arg *ListLogsWithJoinByGitRevisionIDParams,
+) ([]ListLogsWithJoinByGitRevisionIDRow, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsWithJoinByGitRevisionID,
+		arg.ID,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -3705,18 +3984,18 @@ type ListLogsWithJoinByGitRevisionIDPaginatedParams struct {
 }
 
 type ListLogsWithJoinByGitRevisionIDPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByGitRevisionIDPaginated
@@ -3743,8 +4022,15 @@ type ListLogsWithJoinByGitRevisionIDPaginatedRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    gr.id = ?
-func (q *Queries) ListLogsWithJoinByGitRevisionIDPaginated(ctx context.Context, arg *ListLogsWithJoinByGitRevisionIDPaginatedParams) ([]ListLogsWithJoinByGitRevisionIDPaginatedRow, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByGitRevisionIDPaginated, arg.ID)
+func (q *Queries) ListLogsWithJoinByGitRevisionIDPaginated(
+	ctx context.Context,
+	arg *ListLogsWithJoinByGitRevisionIDPaginatedParams,
+) ([]ListLogsWithJoinByGitRevisionIDPaginatedRow, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsWithJoinByGitRevisionIDPaginated,
+		arg.ID,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -3809,18 +4095,18 @@ type ListLogsWithJoinByGoVersionIDParams struct {
 }
 
 type ListLogsWithJoinByGoVersionIDRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByGoVersionID
@@ -3847,7 +4133,10 @@ type ListLogsWithJoinByGoVersionIDRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    gv.id = ?
-func (q *Queries) ListLogsWithJoinByGoVersionID(ctx context.Context, arg *ListLogsWithJoinByGoVersionIDParams) ([]ListLogsWithJoinByGoVersionIDRow, error) {
+func (q *Queries) ListLogsWithJoinByGoVersionID(
+	ctx context.Context,
+	arg *ListLogsWithJoinByGoVersionIDParams,
+) ([]ListLogsWithJoinByGoVersionIDRow, error) {
 	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByGoVersionID, arg.ID)
 	if err != nil {
 		return nil, err
@@ -3913,18 +4202,18 @@ type ListLogsWithJoinByGoVersionIDPaginatedParams struct {
 }
 
 type ListLogsWithJoinByGoVersionIDPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinByGoVersionIDPaginated
@@ -3951,8 +4240,15 @@ type ListLogsWithJoinByGoVersionIDPaginatedRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	WHERE
 //	    gv.id = ?
-func (q *Queries) ListLogsWithJoinByGoVersionIDPaginated(ctx context.Context, arg *ListLogsWithJoinByGoVersionIDPaginatedParams) ([]ListLogsWithJoinByGoVersionIDPaginatedRow, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsWithJoinByGoVersionIDPaginated, arg.ID)
+func (q *Queries) ListLogsWithJoinByGoVersionIDPaginated(
+	ctx context.Context,
+	arg *ListLogsWithJoinByGoVersionIDPaginatedParams,
+) ([]ListLogsWithJoinByGoVersionIDPaginatedRow, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsWithJoinByGoVersionIDPaginated,
+		arg.ID,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -4013,23 +4309,23 @@ LIMIT
 `
 
 type ListLogsWithJoinPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
 type ListLogsWithJoinPaginatedRow struct {
-	ID            int64  `db:"id" json:"id"`
-	CreatedAt     string `db:"created_at" json:"created_at"`
-	UserAgent     string `db:"user_agent" json:"user_agent"`
-	Method        string `db:"method" json:"method"`
-	Url           string `db:"url" json:"url"`
-	ElapsedNs     int64  `db:"elapsed_ns" json:"elapsed_ns"`
-	LevelID       int64  `db:"level_id" json:"level_id"`
-	LevelName     string `db:"level_name" json:"level_name"`
+	ID            int64  `db:"id"              json:"id"`
+	CreatedAt     string `db:"created_at"      json:"created_at"`
+	UserAgent     string `db:"user_agent"      json:"user_agent"`
+	Method        string `db:"method"          json:"method"`
+	Url           string `db:"url"             json:"url"`
+	ElapsedNs     int64  `db:"elapsed_ns"      json:"elapsed_ns"`
+	LevelID       int64  `db:"level_id"        json:"level_id"`
+	LevelName     string `db:"level_name"      json:"level_name"`
 	GoVersionName string `db:"go_version_name" json:"go_version_name"`
-	GoVersion     string `db:"go_version" json:"go_version"`
-	BuildSum      string `db:"build_sum" json:"build_sum"`
-	GitRevision   string `db:"git_revision" json:"git_revision"`
+	GoVersion     string `db:"go_version"      json:"go_version"`
+	BuildSum      string `db:"build_sum"       json:"build_sum"`
+	GitRevision   string `db:"git_revision"    json:"git_revision"`
 }
 
 // ListLogsWithJoinPaginated
@@ -4056,8 +4352,16 @@ type ListLogsWithJoinPaginatedRow struct {
 //	    JOIN git_revisions gr ON l.git_revision_id = gr.id
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListLogsWithJoinPaginated(ctx context.Context, arg *ListLogsWithJoinPaginatedParams) ([]ListLogsWithJoinPaginatedRow, error) {
-	rows, err := q.db.QueryContext(ctx, listLogsWithJoinPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListLogsWithJoinPaginated(
+	ctx context.Context,
+	arg *ListLogsWithJoinPaginatedParams,
+) ([]ListLogsWithJoinPaginatedRow, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listLogsWithJoinPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -4138,7 +4442,7 @@ LIMIT
 `
 
 type ListURLsPaginatedParams struct {
-	Limit  int64 `db:"limit" json:"limit"`
+	Limit  int64 `db:"limit"  json:"limit"`
 	Offset int64 `db:"offset" json:"offset"`
 }
 
@@ -4150,8 +4454,16 @@ type ListURLsPaginatedParams struct {
 //	    urls
 //	LIMIT
 //	    ? OFFSET ?
-func (q *Queries) ListURLsPaginated(ctx context.Context, arg *ListURLsPaginatedParams) ([]Url, error) {
-	rows, err := q.db.QueryContext(ctx, listURLsPaginated, arg.Limit, arg.Offset)
+func (q *Queries) ListURLsPaginated(
+	ctx context.Context,
+	arg *ListURLsPaginatedParams,
+) ([]Url, error) {
+	rows, err := q.db.QueryContext(
+		ctx,
+		listURLsPaginated,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -4184,7 +4496,7 @@ WHERE
 `
 
 type UpdateGoVersionByIDParams struct {
-	Name    string `db:"name" json:"name"`
+	Name    string `db:"name"    json:"name"`
 	Version string `db:"version" json:"version"`
 }
 
@@ -4197,7 +4509,10 @@ type UpdateGoVersionByIDParams struct {
 //	    version = ?
 //	WHERE
 //	    id = 1
-func (q *Queries) UpdateGoVersionByID(ctx context.Context, arg *UpdateGoVersionByIDParams) error {
+func (q *Queries) UpdateGoVersionByID(
+	ctx context.Context,
+	arg *UpdateGoVersionByIDParams,
+) error {
 	_, err := q.db.ExecContext(ctx, updateGoVersionByID, arg.Name, arg.Version)
 	return err
 }
