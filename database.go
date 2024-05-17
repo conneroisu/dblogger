@@ -47,7 +47,7 @@ type DBTX interface {
 //		q := data.New(tx)
 //		defer q.Close()
 func New(db DBTX) *Queries {
-	return &Queries{database: db}
+	return &Queries{database: db, mutex: sync.Mutex{}}
 }
 
 // Queries defines the queries that are run against the database.
@@ -79,6 +79,7 @@ type Queries struct {
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
 		database: tx,
+		mutex:    sync.Mutex{},
 	}
 }
 

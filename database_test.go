@@ -184,3 +184,65 @@ func TestQueriesParallel(t *testing.T) {
 	}
 	fmt.Printf("t: %v\n", n)
 }
+
+// TestQueries tests the database queries by writing a log message to the database
+func TestQueriesEmptyUrl(t *testing.T) {
+	db, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to open database: %w", err))
+	}
+	getenv := func(key string) (string, error) {
+		switch key {
+		case "DEPLOYMENT":
+			return "staging", nil
+		default:
+			return "", fmt.Errorf("invalid key: %s", key)
+		}
+	}
+	q, err := NewLogsDatabase(getenv, db)
+	if err != nil {
+		tracerr.PrintSourceColor(err)
+	}
+	// bytesVers := []byte(``)
+	// read from ./testdata/valid_log.json
+	bytesVers, err := os.ReadFile("./testdata/valid_log_empty_url.json")
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to read test data: %w", err))
+	}
+	n, err := q.Write(bytesVers)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("t: %v\n", n)
+}
+
+// TestQueries tests the database queries by writing a log message to the database
+func TestQueriesNoUrl(t *testing.T) {
+	db, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to open database: %w", err))
+	}
+	getenv := func(key string) (string, error) {
+		switch key {
+		case "DEPLOYMENT":
+			return "staging", nil
+		default:
+			return "", fmt.Errorf("invalid key: %s", key)
+		}
+	}
+	q, err := NewLogsDatabase(getenv, db)
+	if err != nil {
+		tracerr.PrintSourceColor(err)
+	}
+	// bytesVers := []byte(``)
+	// read from ./testdata/valid_log.json
+	bytesVers, err := os.ReadFile("./testdata/valid_log_no_url.json")
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to read test data: %w", err))
+	}
+	n, err := q.Write(bytesVers)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("t: %v\n", n)
+}

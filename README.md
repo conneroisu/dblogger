@@ -49,6 +49,7 @@ make lint
 
 ### Database
 
+Combine all the sql files (shcemas, queries, seeds) into a single sql file each. (ex: [`data/combined/schema.sql`](https://github.com/conneroisu/dblogger/blob/main/data/combined/schema.sql))
 ```bash
 make database
 ```
