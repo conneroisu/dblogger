@@ -14,7 +14,6 @@ go get github.com/conneroisu/dblogger
 
 ## Usage
 
-
 ## Development
 
 ### SQL
