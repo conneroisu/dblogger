@@ -3,7 +3,7 @@
 [![Go Test](https://github.com/conneroisu/dblogger/actions/workflows/test.yaml/badge.svg)](https://github.com/conneroisu/dblogger/actions/workflows/test.yaml)
 [![golangci-lint](https://github.com/conneroisu/dblogger/actions/workflows/ci.yaml/badge.svg)](https://github.com/conneroisu/dblogger/actions/workflows/ci.yaml)
 
-Zerolog Log Writer for Sqlite Databases
+Zerolog Log Writer for Sqlite, Turso, RqLite, and other sqlite-like dialected databases.
 
 A zerolog-based logger for the sqlite3 dialect.
 
