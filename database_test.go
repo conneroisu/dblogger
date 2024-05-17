@@ -9,11 +9,28 @@ import (
 
 	_ "modernc.org/sqlite"
 
+	"github.com/rs/zerolog"
 	"github.com/ztrue/tracerr"
 )
 
+// TestSchema tests the database schema to see that a database can be created
+// with the schema.
+func TestSchema(t *testing.T) {
+	t.Parallel()
+	db, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to open database: %w", err))
+	}
+	_, err = db.Exec(SQLSchema)
+	if err != nil {
+		t.Fatal(fmt.Errorf("failed to create database: %w", err))
+	}
+}
+
+// TestQueries tests the database queries by writing a log message to the database
 // TestQueries tests the database queries by writing a log message to the database
 func TestQueries(t *testing.T) {
+	t.Parallel()
 	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
 		t.Fatal(fmt.Errorf("failed to open database: %w", err))
@@ -30,8 +47,6 @@ func TestQueries(t *testing.T) {
 	if err != nil {
 		tracerr.PrintSourceColor(err)
 	}
-	// bytesVers := []byte(``)
-	// read from ./testdata/valid_log.json
 	bytesVers, err := os.ReadFile("./testdata/valid_log.json")
 	if err != nil {
 		t.Fatal(fmt.Errorf("failed to read test data: %w", err))
@@ -43,17 +58,7 @@ func TestQueries(t *testing.T) {
 	fmt.Printf("t: %v\n", n)
 }
 
-func TestSchema(t *testing.T) {
-	db, err := sql.Open("sqlite", ":memory:")
-	if err != nil {
-		t.Fatal(fmt.Errorf("failed to open database: %w", err))
-	}
-	_, err = db.Exec(SQLSchema)
-	if err != nil {
-		t.Fatal(fmt.Errorf("failed to create database: %w", err))
-	}
-}
-
+// TestTx tests the database transactions
 func TestTx(t *testing.T) {
 	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
@@ -132,7 +137,7 @@ func TestQueriesParallel(t *testing.T) {
 	}
 	t.Run("write1", func(t *testing.T) {
 		t.Parallel()
-		n, err := q.Write(bytesVers)
+		n, err := q.WriteLevel(zerolog.DebugLevel, bytesVers)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -187,6 +192,7 @@ func TestQueriesParallel(t *testing.T) {
 
 // TestQueries tests the database queries by writing a log message to the database
 func TestQueriesEmptyUrl(t *testing.T) {
+	t.Parallel()
 	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
 		t.Fatal(fmt.Errorf("failed to open database: %w", err))
@@ -218,6 +224,7 @@ func TestQueriesEmptyUrl(t *testing.T) {
 
 // TestQueries tests the database queries by writing a log message to the database
 func TestQueriesNoUrl(t *testing.T) {
+	t.Parallel()
 	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
 		t.Fatal(fmt.Errorf("failed to open database: %w", err))
