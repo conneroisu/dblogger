@@ -10,3 +10,6 @@ gum spin --spinner dot --title "Running GolangCI Lint" --show-output -- \
 
 gum spin --spinner dot --title "Running SQLC Vet" --show-output -- \
 	sqlc vet
+
+gum spin --spinner dot --title "Running Gocritic" --show-output -- \
+	gocritic check ./... -enableAll

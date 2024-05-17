@@ -47,7 +47,7 @@ type DBTX interface {
 //		q := data.New(tx)
 //		defer q.Close()
 func New(db DBTX) *Queries {
-	return &Queries{database: db, mutex: sync.Mutex{}}
+	return &Queries{db: db, mutex: sync.Mutex{}}
 }
 
 // Queries defines the queries that are run against the database.
@@ -62,8 +62,8 @@ func New(db DBTX) *Queries {
 //		}
 //	     println(out) // number of git revisions
 type Queries struct {
-	database DBTX
-	mutex    sync.Mutex
+	db    DBTX
+	mutex sync.Mutex
 }
 
 // WithTx returns a new Queries instance that is already
@@ -78,8 +78,8 @@ type Queries struct {
 //	q := dblogger.New(tx)
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		database: tx,
-		mutex:    sync.Mutex{},
+		db:    tx,
+		mutex: sync.Mutex{},
 	}
 }
 
@@ -106,7 +106,7 @@ func (q *Queries) Write(p []byte) (n int, err error) {
 	if err != nil {
 		return 0, fmt.Errorf("failed to unmarshal log: %w", err)
 	}
-	err = q.InsertLogEntry(context.Background(), InsertLogEntryParams{
+	err = q.InsertLogEntry(context.Background(), &InsertLogEntryParams{
 		GoVersionID:   goVersionId,
 		BuildSumID:    buildSumId,
 		GitRevisionID: gitRevisionId,
@@ -161,7 +161,7 @@ func (q *Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
 	if err != nil {
 		return 0, fmt.Errorf("failed to unmarshal log: %w", err)
 	}
-	err = q.InsertLogEntry(context.Background(), InsertLogEntryParams{
+	err = q.InsertLogEntry(context.Background(), &InsertLogEntryParams{
 		GoVersionID:   goVersionId,
 		BuildSumID:    buildSumId,
 		GitRevisionID: gitRevisionId,

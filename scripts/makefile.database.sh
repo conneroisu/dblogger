@@ -24,3 +24,9 @@ gum spin --spinner dot --title "Formatting SQL Files" --show-output -- \
 gum spin --spinner dot --title "Generating SQLC Models" --show-output -- \
 	sqlc generate
 
+# replace lines 28 to the end of the file of ./querier.go with the lines 11 to the end of the file of ./data/querier.go
+gum spin --spinner dot --title "Replacing Querier" --show-output -- \
+	sed -i '28,/^}/d' ./querier.go && sed -i '1,10d' ./data/querier.go && cat ./data/querier.go >> ./querier.go
+
+gum spin --spinner dot --title "Cleaning" --show-output -- \
+	make clean

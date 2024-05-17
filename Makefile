@@ -20,3 +20,6 @@ test:
 
 dev.requirements:
 	@sh ./scripts/makefile.dev.requirements.sh
+
+clean:
+	@sh ./scripts/makefile.clean.sh

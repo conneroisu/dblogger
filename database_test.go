@@ -89,19 +89,19 @@ func TestTx(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = qtx.InsertBuildSumReturningID(context.Background(), InsertBuildSumReturningIDParams{
+	_, err = qtx.InsertBuildSumReturningID(context.Background(), &InsertBuildSumReturningIDParams{
 		BuildSum: "test",
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = qtx.InsertDeploymentReturningID(context.Background(), InsertDeploymentReturningIDParams{
+	_, err = qtx.InsertDeploymentReturningID(context.Background(), &InsertDeploymentReturningIDParams{
 		Name: "test",
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = qtx.InsertGitRevisionReturningID(context.Background(), InsertGitRevisionReturningIDParams{
+	_, err = qtx.InsertGitRevisionReturningID(context.Background(), &InsertGitRevisionReturningIDParams{
 		GitRevision: "test",
 	})
 	if err != nil {
