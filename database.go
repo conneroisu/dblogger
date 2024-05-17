@@ -4,13 +4,14 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"math"
+	"sync"
 
 	"github.com/rs/zerolog"
 	_ "modernc.org/sqlite"
 )
 
-// {"level":"info","git_revision":"e8ff7107e13808170243634f7e4256245c3236be","deployment":"","go_version":"go1.22.0","build_sum":"","method":"GET","url":"/home","user_agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36","elapsed_ms":0.654586,"time":"2024-05-16T08:35:39.264442297-05:00","message":"incoming request to //home"}
 // DBTX is the interface for the database/sql.Tx type
 // and is used to simplify the queries interface by
 // allowing the queries to be run within a transaction.
@@ -46,7 +47,7 @@ type DBTX interface {
 //		q := data.New(tx)
 //		defer q.Close()
 func New(db DBTX) *Queries {
-	return &Queries{db: db}
+	return &Queries{database: db}
 }
 
 // Queries defines the queries that are run against the database.
@@ -61,7 +62,8 @@ func New(db DBTX) *Queries {
 //		}
 //	     println(out) // number of git revisions
 type Queries struct {
-	db DBTX
+	database DBTX
+	mutex    sync.Mutex
 }
 
 // WithTx returns a new Queries instance that is already
@@ -73,17 +75,18 @@ type Queries struct {
 //	if err != nil {
 //	    return err
 //	}
-//	q := data.New(tx)
-//	defer q.Close()
+//	q := dblogger.New(tx)
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db: tx,
+		database: tx,
 	}
 }
 
 // Write writes the data to the database.
 // This makes the Queries type implement the io.Writer interface.
-func (q Queries) Write(p []byte) (n int, err error) {
+func (q *Queries) Write(p []byte) (n int, err error) {
+	q.mutex.Lock()
+	defer q.mutex.Unlock()
 	type JsonLog struct {
 		Level       string  `json:"level"`
 		GitRevision string  `json:"git_revision"`
@@ -100,7 +103,7 @@ func (q Queries) Write(p []byte) (n int, err error) {
 	var log JsonLog
 	err = json.Unmarshal(p, &log)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("failed to unmarshal log: %w", err)
 	}
 	err = q.InsertLogEntry(context.Background(), InsertLogEntryParams{
 		GoVersionID:   goVersionId,
@@ -114,14 +117,16 @@ func (q Queries) Write(p []byte) (n int, err error) {
 		LevelID:       0,
 	})
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("failed to insert log entry: %w", err)
 	}
 	return len(p), nil
 }
 
 // WriteLevel writes the data to the database with the provided level.
 // This makes the Queries type implement the zerolog.LevelWriter interface.
-func (q Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
+func (q *Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
+	q.mutex.Lock()
+	defer q.mutex.Unlock()
 	var levelID int64
 	switch level {
 	case zerolog.DebugLevel:
@@ -153,7 +158,7 @@ func (q Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
 	var log JsonLog
 	err = json.Unmarshal(p, &log)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("failed to unmarshal log: %w", err)
 	}
 	err = q.InsertLogEntry(context.Background(), InsertLogEntryParams{
 		GoVersionID:   goVersionId,
@@ -167,7 +172,7 @@ func (q Queries) WriteLevel(level zerolog.Level, p []byte) (n int, err error) {
 		LevelID:       levelID,
 	})
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("failed to insert log entry: %w", err)
 	}
 	return len(p), nil
 }
