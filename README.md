@@ -1,5 +1,7 @@
 # dblogger
 
+[![Go Test](https://github.com/conneroisu/dblogger/actions/workflows/test.yaml/badge.svg)](https://github.com/conneroisu/dblogger/actions/workflows/test.yaml)
+
 Zerolog Log Writer for Sqlite Databases
 
 A zerolog-based logger for the sqlite3 dialect.
