@@ -1,6 +1,7 @@
 # dblogger
 
 [![Go Test](https://github.com/conneroisu/dblogger/actions/workflows/test.yaml/badge.svg)](https://github.com/conneroisu/dblogger/actions/workflows/test.yaml)
+[![golangci-lint](https://github.com/conneroisu/dblogger/actions/workflows/ci.yaml/badge.svg)](https://github.com/conneroisu/dblogger/actions/workflows/ci.yaml)
 
 Zerolog Log Writer for Sqlite Databases
 
