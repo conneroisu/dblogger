@@ -12,7 +12,7 @@ CREATE INDEX build_sums_build_sum_index ON build_sums (build_sum);
 -- file: deployments.sql
 -- url: github.com/conneroisu/dblogger/data/schemas/deployments.sql
 -- description: deployments.sql is a table that stores deployment information
-CREATE TABLE deployments (
+CREATE TABLE IF NOT EXISTS deployments (
     id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -22,7 +22,7 @@ CREATE TABLE deployments (
 -- file: git_revisions.sql
 -- url: github.com/conneroisu/dblogger/data/schemas/git_revisions.sql
 -- description: git_revisions.sql is a table that stores git revisions
-CREATE TABLE git_revisions (
+CREATE TABLE IF NOT EXISTS git_revisions (
     id INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT,
     git_revision TEXT UNIQUE NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS go_versions (
 -- file: log_levels.sql
 -- url: github.com/conneroisu/dblogger/data/schemas/log_levels.sql
 -- description: log_levels.sql is a table of log levels
-CREATE TABLE log_levels (
+CREATE TABLE IF NOT EXISTS log_levels (
     id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
 );
@@ -84,7 +84,7 @@ CREATE INDEX IF NOT EXISTS api_logs_deployment_id_index ON api_logs (deployment_
 -- file: urls.sql
 -- url: github.com/conneroisu/dblogger/data/schemas/urls.sql
 -- description: urls.sql is the schema for the urls table
-CREATE TABLE urls (
+CREATE TABLE IF NOT EXISTS urls (
     id INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
     url TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
