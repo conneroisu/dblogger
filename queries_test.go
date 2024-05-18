@@ -35,148 +35,43 @@ func initDatabase() (*Queries, error) {
 // of the Queries type.
 //
 // This test case ensures that the method correctly counts
-// the number of build sums in the database.
+// the number of build sums in the database upong the initialization
+// of said database.
 func TestQueries_CountBuildSums(t *testing.T) {
 	t.Parallel()
-	type args struct {
-		ctx context.Context
-	}
 	q, err := initDatabase()
 	if err != nil {
 		t.Fatal(err)
-		return
 	}
-	tests := []struct {
-		name    string
-		args    args
-		want    int64
-		wantErr bool
-	}{
-		{
-			name: "test",
-			args: args{
-				ctx: context.Background(),
-			},
-			want:    1,
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := q.CountBuildSums(tt.args.ctx)
-			if (err != nil) != tt.wantErr {
-				t.Errorf(
-					"Queries.CountBuildSums() error = %v, wantErr %v",
-					err,
-					tt.wantErr,
-				)
-				return
-			}
-			if got != tt.want {
-				t.Errorf(
-					"Queries.CountBuildSums() = %v, want %v",
-					got,
-					tt.want,
-				)
-			}
-		})
-	}
-}
+	t.Run("test upon initialization that the number of build sums is 1", func(t *testing.T) {
+		got, err := q.CountBuildSums(context.Background())
+		if err != nil {
+			t.Errorf("Queries.CountBuildSums() error = %v", err)
+		}
+		if got != 1 {
+			t.Errorf("Queries.CountBuildSums() = %v, want %v", got, 1)
+		}
+	})
 
-func TestQueries_CountDeployments(t *testing.T) {
-	t.Parallel()
-	type args struct {
-		ctx context.Context
-	}
-	q, err := initDatabase()
-	if err != nil {
-		t.Fatal(err)
-		return
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    int64
-		wantErr bool
-	}{
-		{
-			name: "test",
-			args: args{
-				ctx: context.Background(),
-			},
-			want:    1,
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := q.CountDeployments(tt.args.ctx)
-			if (err != nil) != tt.wantErr {
-				t.Errorf(
-					"Queries.CountDeployments() error = %v, wantErr %v",
-					err,
-					tt.wantErr,
-				)
-				return
-			}
-			if got != tt.want {
-				t.Errorf(
-					"Queries.CountDeployments() = %v, want %v",
-					got,
-					tt.want,
-				)
-			}
-		})
-	}
-}
+	t.Run("test upon initialization that the number of deployments is 1", func(t *testing.T) {
+		got, err := q.CountDeployments(context.Background())
+		if err != nil {
+			t.Errorf("Queries.CountDeployments() error = %v", err)
+		}
+		if got != 1 {
+			t.Errorf("Queries.CountDeployments() = %v, want %v", got, 1)
+		}
+	})
 
-// TestQueries_CountGitRevisions tests the CountGitRevisions method
-// of the Queries type upon initialization.
-func TestQueries_CountGitRevisions(t *testing.T) {
-	t.Parallel()
-	type args struct {
-		ctx context.Context
-	}
-	q, err := initDatabase()
-	if err != nil {
-		t.Fatal(err)
-		return
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    int64
-		wantErr bool
-	}{
-		{
-			name: "test",
-			args: args{
-				ctx: context.Background(),
-			},
-			want:    1,
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := q.CountGitRevisions(tt.args.ctx)
-			if (err != nil) != tt.wantErr {
-				t.Errorf(
-					"Queries.CountGitRevisions() error = %v, wantErr %v",
-					err,
-					tt.wantErr,
-				)
-				return
-			}
-			if got != tt.want {
-				t.Errorf(
-					"Queries.CountGitRevisions() = %v, want %v",
-					got,
-					tt.want,
-				)
-			}
-		})
-	}
+	t.Run("test upon initialization that the number of deployments is 1", func(t *testing.T) {
+		got, err := q.CountGitRevisions(context.Background())
+		if err != nil {
+			t.Errorf("Queries.CountDeployments() error = %v", err)
+		}
+		if got != 1 {
+			t.Errorf("Queries.CountDeployments() = %v, want %v", got, 1)
+		}
+	})
 }
 
 // TestQueries_CountGoVersions tests the CountGoVersions method
