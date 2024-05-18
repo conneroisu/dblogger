@@ -35,6 +35,8 @@ func NewLogsDatabase(
 	ctx := context.Background()
 	buildInfo, ok := debug.ReadBuildInfo()
 	if ok {
+		goVersion = buildInfo.GoVersion
+		buildSum = buildInfo.Main.Sum
 		for _, v := range buildInfo.Settings {
 			if v.Key == "vcs.revision" {
 				gitRevision = v.Value
@@ -44,8 +46,6 @@ func NewLogsDatabase(
 			gitRevision = "unknown"
 		}
 	}
-	goVersion = buildInfo.GoVersion
-	buildSum = buildInfo.Main.Sum
 	_, err := db.Exec(SQLSchema)
 	q := New(db)
 	if err != nil {

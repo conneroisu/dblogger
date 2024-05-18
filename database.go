@@ -42,6 +42,8 @@ type DBTX interface {
 //		}
 //		q := data.New(tx)
 //		defer q.Close()
+//
+// Deprecated: use NewLogsDatabase instead
 func New(db DBTX) *Queries {
 	return &Queries{db: db, mutex: sync.Mutex{}}
 }

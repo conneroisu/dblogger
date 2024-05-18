@@ -15,17 +15,13 @@ func (q *Queries) Write(p []byte) (n int, err error) {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
 	type JsonLog struct {
-		Level       string  `json:"level"`
-		GitRevision string  `json:"git_revision"`
-		Deployment  string  `json:"deployment"`
-		GoVersion   string  `json:"go_version"`
-		BuildSum    string  `json:"build_sum"`
-		Method      string  `json:"method"`
-		Url         string  `json:"url"`
-		UserAgent   string  `json:"user_agent"`
-		ElapsedMs   float64 `json:"elapsed_ms"`
-		Time        string  `json:"time"`
-		Message     string  `json:"message"`
+		Level     string  `json:"level"`
+		Method    string  `json:"method"`
+		Url       string  `json:"url"`
+		UserAgent string  `json:"user_agent"`
+		ElapsedMs float64 `json:"elapsed_ms"`
+		Time      string  `json:"time"`
+		Message   string  `json:"message"`
 	}
 	var log JsonLog
 	err = json.Unmarshal(p, &log)
@@ -73,17 +69,13 @@ func (q *Queries) WriteLevel(
 		levelID = 6
 	}
 	type JsonLog struct {
-		Level       string  `json:"level"`
-		GitRevision string  `json:"git_revision"`
-		Deployment  string  `json:"deployment"`
-		GoVersion   string  `json:"go_version"`
-		BuildSum    string  `json:"build_sum"`
-		Method      string  `json:"method"`
-		Url         string  `json:"url"`
-		UserAgent   string  `json:"user_agent"`
-		ElapsedMs   float64 `json:"elapsed_ms"`
-		Time        string  `json:"time"`
-		Message     string  `json:"message"`
+		Level     string  `json:"level"`
+		Method    string  `json:"method"`
+		Url       string  `json:"url"`
+		UserAgent string  `json:"user_agent"`
+		ElapsedMs float64 `json:"elapsed_ms"`
+		Time      string  `json:"time"`
+		Message   string  `json:"message"`
 	}
 	var log JsonLog
 	err = json.Unmarshal(p, &log)
