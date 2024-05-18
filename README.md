@@ -5,7 +5,7 @@
 
 Zerolog Log Writer for Sqlite, Turso, RqLite, and other sqlite-like dialected databases.
 
-A zerolog-based logger for the sqlite3 dialect.
+A std-lib log and zerolog logger for the sqlite3 dialect.
 
 ## Installation
 
