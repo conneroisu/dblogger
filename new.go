@@ -27,6 +27,14 @@ var SQLQueries string
 //		log.Fatal(err)
 //	}
 //	defer db.Close()
+//	getenv := func(key string) string {
+//		switch key {
+//		case "DEPLOYMENT":
+//			return "staging"
+//		default:
+//			return ""
+//		}
+//	}
 //	q := NewLogsDatabase(db)
 func NewLogsDatabase(
 	getenv func(string) (string, error),
