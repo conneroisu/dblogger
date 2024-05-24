@@ -14,3 +14,5 @@ data/querier.go
 data/queries.sql.go
 data/database.go
 test.db
+
+dist/
