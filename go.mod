@@ -3,10 +3,8 @@ module github.com/conneroisu/dblogger
 go 1.22
 
 require (
-	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/rs/zerolog v1.32.0
 	github.com/ztrue/tracerr v0.4.0
-	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	modernc.org/sqlite v1.29.9
 )
 
