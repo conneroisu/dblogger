@@ -1,3 +1,12 @@
+#!/bin/bash
+# name: makefile.database.sh
+# description: Runs the database scripts
+#              to create the database
+#              , schema, and queries
+#              and then formats the code
+#              and cleans the project
+#
+# url: github.com/conneroisu/dblogger/scripts/makefile.database.sh
 
 # append all the sql files found in ./data/schemas/*.sql into ./data/combined/schema.sql
 gum spin --spinner dot --title "Combining SQL Schemas" --show-output -- \
@@ -31,13 +40,15 @@ gum spin --spinner dot --title "Removing Last Line" --show-output -- \
 gum spin --spinner dot --title "Replacing Querier" --show-output -- \
 	sed -i '28,/^}/d' ./querier.go && sed -i '1,10d' ./data/querier.go && cat ./data/querier.go >> ./querier.go
 
+# replace lines 28 to the end of the file of ./querier.go with the lines 11 to the end of the file of ./data/querier.go
 gum spin --spinner dot --title "Replacing Queries File" --show-output -- \
 	rm ./queries.go && cp ./data/queries.sql.go ./queries.go
 	
-
+# format the code using the predefined make format target
 gum spin --spinner dot --title "Formatting" --show-output -- \
 	make format
 
+# clean the project using the predefined make clean target
 gum spin --spinner dot --title "Cleaning" --show-output -- \
 	make clean
 

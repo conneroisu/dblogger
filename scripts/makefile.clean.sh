@@ -1,4 +1,11 @@
-
+#!/bin/bash
+# name: makefile.clean.sh
+# description: Cleans the project
+#              by removing all the generated files
+#              and the node_modules folder
+#              and all the *.go files in the data folder
+#              and the coverage.out file
+# url: github.com/conneroisu/dblogger/scripts/makefile.clean.sh
 
 # if there is a tmp folder, delete it
 if [ -d "tmp" ]; then
@@ -21,3 +28,8 @@ for file in ./data/*.go; do
         rm "$file"
     fi
 done
+
+# if there is a coverage.out file, delete it
+if [ -f "coverage.out" ]; then
+    rm coverage.out
+fi
